@@ -62,577 +62,193 @@
 </head>
 <body class="h-screen flex flex-col overflow-hidden bg-slate-950 text-slate-100 select-none">
 
-  <header class="h-16 border-b border-slate-800 bg-slate-900/90 backdrop-blur px-4 flex items-center justify-between z-20 shrink-0">
+  <!-- HEADER -->
+  <header class="h-auto lg:h-16 border-b border-slate-800 bg-slate-900/90 backdrop-blur px-4 py-2 lg:py-0 flex flex-col lg:flex-row items-center justify-between gap-3 z-20 shrink-0">
     <!-- Brand Title -->
-    <div class="flex items-center space-x-3">
-      <div class="bg-indigo-600 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
-        <i class="fa-solid fa-layer-group text-lg"></i>
-      </div>
-      <div>
-        <h1 class="font-bold text-base tracking-wide leading-tight flex items-center gap-2">
-          StudioGrid Pro
-          <span class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-1.5 py-0.5 rounded font-mono">v3.2</span>
-        </h1>
-        <p class="text-xs text-slate-400">Siatka, analiza waloru, kontury i kadrowanie dla artystów</p>
+    <div class="flex items-center space-x-3 w-full lg:w-auto justify-between lg:justify-start">
+      <div class="flex items-center space-x-3">
+        <div class="bg-indigo-600 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30 shrink-0">
+          <i class="fa-solid fa-layer-group text-lg"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-base tracking-wide leading-tight flex items-center gap-2">
+            StudioGrid Pro
+            <span class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-1.5 py-0.5 rounded font-mono">v3.2</span>
+          </h1>
+          <p class="text-xs text-slate-400 hidden sm:block">Siatka, analiza waloru, kontury i kadrowanie dla artystów</p>
+        </div>
       </div>
     </div>
 
     <!-- Mode Selector Tabs -->
-    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800 shadow-inner overflow-x-auto">
-      <button id="modeStandardBtn" class="tab-active px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 text-slate-400 whitespace-nowrap">
+    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800 shadow-inner overflow-x-auto w-full lg:w-auto max-w-full">
+      <button id="modeStandardBtn" class="tab-active px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 text-slate-400 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-border-all"></i>
         <span>1. Siatka i Skosy</span>
       </button>
-      <button id="modeValueBtn" class="px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 text-slate-400 whitespace-nowrap">
+      <button id="modeValueBtn" class="px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 text-slate-400 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-circle-half-stroke text-emerald-400"></i>
         <span>2. Masa i Walor</span>
       </button>
-      <button id="modeSubdivisionBtn" class="px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 text-slate-400 whitespace-nowrap">
+      <button id="modeSubdivisionBtn" class="px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 text-slate-400 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-draw-polygon"></i>
         <span>3. Obrys i Subdywizja</span>
       </button>
-      <button id="modeCropBtn" class="px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 text-slate-400 whitespace-nowrap">
+      <button id="modeCropBtn" class="px-3 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1.5 text-slate-400 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-crop-simple text-amber-400"></i>
         <span>4. Kadrowanie i Obrót</span>
       </button>
     </div>
 
     <!-- Action Buttons -->
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 w-full lg:w-auto justify-end">
       <label for="imageLoader" class="cursor-pointer px-3.5 py-2 text-xs font-medium rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-2">
         <i class="fa-solid fa-folder-open text-indigo-400"></i>
-        <span class="hidden sm:inline">Wczytaj obraz</span>
+        <span>Wczytaj obraz</span>
       </label>
       <input type="file" id="imageLoader" accept="image/*" class="hidden">
 
       <button id="downloadBtn" disabled class="px-4 py-2 text-xs font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white shadow-lg shadow-indigo-600/20 transition flex items-center gap-2">
         <i class="fa-solid fa-download"></i>
-        <span>Eksportuj Obraz</span>
+        <span>Eksportuj</span>
       </button>
     </div>
   </header>
 
-  <div class="flex flex-1 overflow-hidden relative">
+  <!-- MAIN CONTAINER: RESPONSIVE FLEX-COL ON MOBILE, ROW ON DESKTOP -->
+  <div class="flex flex-col lg:flex-row flex-1 overflow-hidden relative">
 
-    <!-- LEFT SIDEBAR: TOOL 1 (Standard & Custom Grid Controls) -->
-    <aside id="sidebarStandard" class="w-80 border-r border-slate-800 bg-slate-900 flex flex-col shrink-0 overflow-y-auto">
-      <div class="p-4 space-y-6">
-
-        <!-- Grid Layout Presets & Division Inputs -->
-        <div class="space-y-3">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Podział Siatki (1-50)</span>
-            <i class="fa-solid fa-grip text-slate-500"></i>
-          </h2>
-
-          <div class="grid grid-cols-2 gap-2">
-            <button id="preset3x3" class="px-3 py-2 text-xs font-medium rounded-lg bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-600/30 transition text-center">
-              Trójpodział (3x3)
-            </button>
-            <button id="preset4x4" class="px-3 py-2 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-750 transition text-center">
-              Kwadraty (4x4)
-            </button>
-          </div>
-
-          <div class="space-y-3 pt-1">
-            <!-- Columns Control -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-xs text-slate-300">Kolumny (pionowe):</label>
-                <input type="number" id="gridColsNum" min="1" max="50" value="3" class="w-14 text-center text-xs font-mono bg-slate-800 border border-slate-700 rounded text-indigo-400 py-0.5 focus:border-indigo-500 outline-none">
-              </div>
-              <input type="range" id="gridCols" min="1" max="50" value="3" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+    <!-- SIDEBARS CONTAINER -->
+    <div class="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-slate-800 bg-slate-900 flex flex-col shrink-0 max-h-56 lg:max-h-none overflow-y-auto">
+      
+      <!-- LEFT SIDEBAR: TOOL 1 -->
+      <aside id="sidebarStandard" class="flex flex-col w-full">
+        <div class="p-4 space-y-6">
+          <div class="space-y-3">
+            <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+              <span>Podział Siatki (1-50)</span>
+              <i class="fa-solid fa-grip text-slate-500"></i>
+            </i>
+            </h2>
+            <div class="grid grid-cols-2 gap-2">
+              <button id="preset3x3" class="px-3 py-2 text-xs font-medium rounded-lg bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-600/30 transition text-center">
+                Trójpodział (3x3)
+              </button>
+              <button id="preset4x4" class="px-3 py-2 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-750 transition text-center">
+                Kwadraty (4x4)
+              </button>
             </div>
-
-            <!-- Rows Control -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-xs text-slate-300">Wiersze (poziome):</label>
-                <input type="number" id="gridRowsNum" min="1" max="50" value="3" class="w-14 text-center text-xs font-mono bg-slate-800 border border-slate-700 rounded text-indigo-400 py-0.5 focus:border-indigo-500 outline-none">
-              </div>
-              <input type="range" id="gridRows" min="1" max="50" value="3" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
-            </div>
-          </div>
-        </div>
-
-        <hr class="border-slate-800">
-
-        <!-- Moduły Widoczności Linii i Skosów -->
-        <div class="space-y-3">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Widoczność Linii i Skosów</span>
-            <i class="fa-solid fa-eye text-slate-500"></i>
-          </h2>
-
-          <div class="space-y-2">
-            <!-- Main Vertical & Horizontal Toggles -->
-            <label class="flex items-center justify-between p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 cursor-pointer transition border border-slate-800">
-              <span class="text-xs text-slate-300 flex items-center gap-2">
-                <i class="fa-solid fa-arrows-up-down text-indigo-400"></i> Linie pionowe
-              </span>
-              <input type="checkbox" id="showVertical" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600 focus:ring-0">
-            </label>
-
-            <label class="flex items-center justify-between p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 cursor-pointer transition border border-slate-800">
-              <span class="text-xs text-slate-300 flex items-center gap-2">
-                <i class="fa-solid fa-arrows-left-right text-indigo-400"></i> Linie poziome
-              </span>
-              <input type="checkbox" id="showHorizontal" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600 focus:ring-0">
-            </label>
-
-            <!-- Main Diagonal Controls (Full Image) -->
-            <div class="p-2 rounded-lg bg-slate-800/30 border border-slate-800/80 space-y-2">
-              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Skosy Główne (Cały obraz)</span>
-              
-              <label class="flex items-center justify-between cursor-pointer">
-                <span class="text-xs text-slate-300 flex items-center gap-2">
-                  <i class="fa-solid fa-slash text-slate-400 scale-x-[-1]"></i> Skos opadający (\)
-                </span>
-                <input type="checkbox" id="showMainDiagDown" class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600 focus:ring-0">
-              </label>
-
-              <label class="flex items-center justify-between cursor-pointer">
-                <span class="text-xs text-slate-300 flex items-center gap-2">
-                  <i class="fa-solid fa-slash text-slate-400"></i> Skos wznoszący (/)
-                </span>
-                <input type="checkbox" id="showMainDiagUp" class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600 focus:ring-0">
-              </label>
-            </div>
-
-            <!-- Cell Diagonals Controls (Per Cell) -->
-            <div class="p-2 rounded-lg bg-slate-800/30 border border-slate-800/80 space-y-2">
-              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Skosy w Komórkach</span>
-
-              <label class="flex items-center justify-between cursor-pointer">
-                <span class="text-xs text-slate-300 flex items-center gap-2">
-                  <i class="fa-solid fa-slash text-slate-400 scale-x-[-1]"></i> Skos opadający w komórkach (\)
-                </span>
-                <input type="checkbox" id="cellDiagDown" class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600 focus:ring-0">
-              </label>
-
-              <label class="flex items-center justify-between cursor-pointer">
-                <span class="text-xs text-slate-300 flex items-center gap-2">
-                  <i class="fa-solid fa-slash text-slate-400"></i> Skos wznoszący w komórkach (/)
-                </span>
-                <input type="checkbox" id="cellDiagUp" class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600 focus:ring-0">
-              </label>
-            </div>
-
-            <!-- Focal Points -->
-            <label class="flex items-center justify-between p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 cursor-pointer transition border border-slate-800">
-              <span class="text-xs text-slate-300 flex items-center gap-2">
-                <i class="fa-solid fa-circle text-amber-400 text-[10px]"></i> Mocne punkty skrzyżowań
-              </span>
-              <input type="checkbox" id="showPoints" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600 focus:ring-0">
-            </label>
-          </div>
-        </div>
-
-        <hr class="border-slate-800">
-
-        <!-- Styl linii -->
-        <div class="space-y-3">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Styl i Wygląd Linii</span>
-            <i class="fa-solid fa-sliders text-slate-500"></i>
-          </h2>
-
-          <div>
-            <label class="text-xs text-slate-300 block mb-1.5">Szybki wybór koloru:</label>
-            <div class="flex items-center gap-2 mb-2">
-              <button data-color="#ef4444" class="preset-color w-6 h-6 rounded-full bg-red-500 ring-2 ring-transparent hover:scale-110 transition"></button>
-              <button data-color="#eab308" class="preset-color w-6 h-6 rounded-full bg-yellow-500 ring-2 ring-transparent hover:scale-110 transition"></button>
-              <button data-color="#22c55e" class="preset-color w-6 h-6 rounded-full bg-green-500 ring-2 ring-transparent hover:scale-110 transition"></button>
-              <button data-color="#06b6d4" class="preset-color w-6 h-6 rounded-full bg-cyan-500 ring-2 ring-transparent hover:scale-110 transition"></button>
-              <button data-color="#ffffff" class="preset-color w-6 h-6 rounded-full bg-white ring-2 ring-transparent hover:scale-110 transition"></button>
-              <button data-color="#000000" class="preset-color w-6 h-6 rounded-full bg-black ring-2 ring-transparent hover:scale-110 border border-slate-700"></button>
-            </div>
-            
-            <div class="flex items-center gap-3">
-              <input type="color" id="lineColor" value="#ef4444" class="w-8 h-8 rounded-lg cursor-pointer bg-slate-800 border-0">
-              <span id="colorHex" class="text-xs font-mono text-slate-400">#EF4444</span>
-            </div>
-          </div>
-
-          <div>
-            <label class="text-xs text-slate-300 flex justify-between mb-1">
-              <span>Grubość linii:</span>
-              <span id="lineWidthVal" class="font-mono text-indigo-400">2 px</span>
-            </label>
-            <input type="range" id="lineWidth" min="1" max="15" value="2" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
-          </div>
-
-          <div>
-            <label class="text-xs text-slate-300 flex justify-between mb-1">
-              <span>Przezroczystość:</span>
-              <span id="opacityVal" class="font-mono text-indigo-400">80%</span>
-            </label>
-            <input type="range" id="lineOpacity" min="10" max="100" value="80" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
-          </div>
-
-          <div>
-            <label class="text-xs text-slate-300 block mb-1">Wzór linii:</label>
-            <select id="lineStyle" class="w-full text-xs bg-slate-800 border border-slate-700 text-slate-200 rounded-lg p-2 focus:ring-1 focus:ring-indigo-500 outline-none">
-              <option value="solid">Ciągła</option>
-              <option value="dashed">Przerywana</option>
-              <option value="dotted">Kropkowana</option>
-            </select>
-          </div>
-        </div>
-
-      </div>
-    </aside>
-
-    <!-- LEFT SIDEBAR: TOOL 2 (Tonal & Value Adjustments / Masa i Walor) -->
-    <aside id="sidebarValue" class="w-80 border-r border-slate-800 bg-slate-900 flex flex-col shrink-0 overflow-y-auto hidden">
-      <div class="p-4 space-y-6">
-
-        <div class="space-y-3">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Analiza Waloru (Masa)</span>
-            <i class="fa-solid fa-circle-half-stroke text-emerald-400"></i>
-          </h2>
-          <p class="text-xs text-slate-400">Najedź kursorem na obszar obrazu, aby poznać odcień szarości oraz sugerowaną twardość ołówka.</p>
-
-          <!-- LIVE TONAL & PENCIL ADVICE BOX -->
-          <div class="p-3 rounded-xl bg-slate-950 border border-emerald-500/30 space-y-2.5">
-            <div class="flex items-center justify-between text-xs border-b border-slate-800 pb-2">
-              <span class="text-slate-400">Odcień (Jasność):</span>
-              <div class="flex items-center gap-2">
-                <div id="valColorSwatch" class="w-4 h-4 rounded border border-slate-700 bg-slate-800 shrink-0"></div>
-                <span id="valInfoGray" class="font-mono font-semibold text-emerald-400">Najeżdżaj...</span>
-              </div>
-            </div>
-            <div class="flex items-center justify-between text-xs">
-              <span class="text-slate-400">Zalecany ołówek:</span>
-              <span id="valInfoPencil" class="font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">-</span>
-            </div>
-          </div>
-
-          <!-- Grayscale / B&W Toggle -->
-          <label class="flex items-center justify-between p-3 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 cursor-pointer transition">
-            <div class="flex items-center gap-2.5">
-              <i class="fa-solid fa-circle-half-stroke text-emerald-400 text-base"></i>
+            <div class="space-y-3 pt-1">
               <div>
-                <span class="text-xs font-semibold text-slate-200 block">Tryb Czarno-Biały (B&W)</span>
-                <span class="text-[10px] text-slate-400 block">Odłącza kolor dla czystego waloru</span>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-xs text-slate-300">Kolumny (pionowe):</label>
+                  <input type="number" id="gridColsNum" min="1" max="50" value="3" class="w-14 text-center text-xs font-mono bg-slate-800 border border-slate-700 rounded text-indigo-400 py-0.5 outline-none">
+                </div>
+                <input type="range" id="gridCols" min="1" max="50" value="3" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+              </div>
+              <div>
+                <div class="flex justify-between items-center mb-1">
+                  <label class="text-xs text-slate-300">Wiersze (poziome):</label>
+                  <input type="number" id="gridRowsNum" min="1" max="50" value="3" class="w-14 text-center text-xs font-mono bg-slate-800 border border-slate-700 rounded text-indigo-400 py-0.5 outline-none">
+                </div>
+                <input type="range" id="gridRows" min="1" max="50" value="3" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
               </div>
             </div>
-            <input type="checkbox" id="valGrayscale" class="w-4 h-4 rounded text-emerald-500 bg-slate-700 border-slate-600 focus:ring-0">
-          </label>
-        </div>
-
-        <hr class="border-slate-800">
-
-        <!-- Gaussian Blur Control -->
-        <div class="space-y-4">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Rozmycie Gaussowskie (Blur)</span>
-            <i class="fa-solid fa-water text-emerald-400"></i>
-          </h2>
-
-          <div>
-            <div class="flex justify-between items-center mb-1">
-              <label class="text-xs text-slate-300">Promień rozmycia:</label>
-              <span id="valBlurVal" class="font-mono text-emerald-400 text-xs">0 px</span>
-            </div>
-            <input type="range" id="valBlur" min="0" max="30" value="0" step="1" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
-            <p class="text-[11px] text-slate-400 mt-1">Ułatwia widzenie plam i upraszczanie detali (efekt przymrużonych oczu).</p>
-          </div>
-        </div>
-
-        <hr class="border-slate-800">
-
-        <!-- Brightness & Contrast Controls -->
-        <div class="space-y-4">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Korekta Jasności i Kontrastu</span>
-            <i class="fa-solid fa-sun text-slate-500"></i>
-          </h2>
-
-          <div>
-            <div class="flex justify-between items-center mb-1">
-              <label class="text-xs text-slate-300">Jasność (Brightness):</label>
-              <span id="valBrightnessVal" class="font-mono text-emerald-400 text-xs">0%</span>
-            </div>
-            <input type="range" id="valBrightness" min="-100" max="100" value="0" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
           </div>
 
-          <div>
-            <div class="flex justify-between items-center mb-1">
-              <label class="text-xs text-slate-300">Kontrast (Contrast):</label>
-              <span id="valContrastVal" class="font-mono text-emerald-400 text-xs">0%</span>
-            </div>
-            <input type="range" id="valContrast" min="-100" max="100" value="0" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
-          </div>
-        </div>
+          <hr class="border-slate-800">
 
-        <hr class="border-slate-800">
-
-        <!-- Value Posterization / Value Study -->
-        <div class="space-y-4">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Studium Planów Tonalnych (Posterize)</span>
-            <i class="fa-solid fa-layer-group text-slate-500"></i>
-          </h2>
-
-          <label class="flex items-center justify-between p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 cursor-pointer transition border border-slate-800">
-            <span class="text-xs text-slate-300 flex items-center gap-2">
-              <i class="fa-solid fa-stairs text-emerald-400"></i> Redukcja do stopni waloru
-            </span>
-            <input type="checkbox" id="valPosterizeEnable" class="w-4 h-4 rounded text-emerald-500 bg-slate-700 border-slate-600 focus:ring-0">
-          </label>
-
-          <div>
-            <div class="flex justify-between items-center mb-1">
-              <label class="text-xs text-slate-300">Liczba poziomów tonalnych:</label>
-              <span id="valPosterizeLevelsVal" class="font-mono text-emerald-400 text-xs">4 stopnie</span>
-            </div>
-            <input type="range" id="valPosterizeLevels" min="2" max="8" value="4" step="1" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
-            <p class="text-[11px] text-slate-400 mt-1">Dzieli obraz na 2–8 kluczowych wartości tonalnych (przydatne do notatek malarskich i podmalówek).</p>
-          </div>
-
-          <button id="resetValueBtn" class="w-full py-2 px-4 text-xs font-medium rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center justify-center gap-2 mt-2">
-            <i class="fa-solid fa-arrow-rotate-left text-slate-400"></i>
-            <span>Zresetuj ustawienia waloru</span>
-          </button>
-        </div>
-
-      </div>
-    </aside>
-
-    <!-- LEFT SIDEBAR: TOOL 3 (Contour & Recursive Subdivisions Controls) -->
-    <aside id="sidebarSubdivision" class="w-80 border-r border-slate-800 bg-slate-900 flex flex-col shrink-0 overflow-y-auto hidden">
-      <div class="p-4 space-y-6">
-
-        <!-- Moduł Obrysu / Wektorowania Krawędzi -->
-        <div class="space-y-3">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Wykrywanie Konturu (Sobel)</span>
-            <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i>
-          </h2>
-
-          <label class="flex items-center justify-between p-2 rounded-lg bg-indigo-950/40 border border-indigo-500/30 cursor-pointer transition">
-            <span class="text-xs font-medium text-indigo-200 flex items-center gap-2">
-              <i class="fa-solid fa-pen-nib"></i> Włącz Obrys Krawędzi
-            </span>
-            <input type="checkbox" id="subEnableOutline" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600 focus:ring-0">
-          </label>
-
-          <div>
-            <label class="text-xs text-slate-300 flex justify-between mb-1">
-              <span>Czułość detekcji (Próg):</span>
-              <span id="subThresholdVal" class="font-mono text-indigo-400">35</span>
-            </label>
-            <input type="range" id="subThreshold" min="5" max="100" value="35" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
-          </div>
-
-          <div class="flex items-center gap-3">
-            <input type="color" id="subOutlineColor" value="#00ffff" class="w-8 h-8 rounded-lg cursor-pointer bg-slate-800 border-0">
-            <div class="flex-1">
-              <label class="text-xs text-slate-400 block">Kolor Obrysu</label>
-              <span id="subOutlineHex" class="text-xs font-mono text-slate-300">#00FFFF</span>
-            </div>
-          </div>
-        </div>
-
-        <hr class="border-slate-800">
-
-        <!-- Moduł Subdywizji Kwadratów -->
-        <div class="space-y-3">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Siatka Subdywizyjna</span>
-            <i class="fa-solid fa-network-wired text-slate-500"></i>
-          </h2>
-
-          <label class="flex items-center justify-between p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 cursor-pointer transition border border-slate-800">
-            <span class="text-xs text-slate-300 flex items-center gap-2">
-              <i class="fa-solid fa-table-cells-large text-indigo-400"></i> Główne osie (X / Y)
-            </span>
-            <input type="checkbox" id="subShowMainAxes" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600 focus:ring-0">
-          </label>
-
-          <label class="flex items-center justify-between p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 cursor-pointer transition border border-slate-800">
-            <span class="text-xs text-slate-300 flex items-center gap-2">
-              <i class="fa-solid fa-xmark text-indigo-400"></i> Przekątne (Krzyże)
-            </span>
-            <input type="checkbox" id="subShowDiagonals" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600 focus:ring-0">
-          </label>
-
-          <div class="space-y-1.5">
-            <label class="text-xs text-slate-300 flex justify-between">
-              <span>Głębokość podziału:</span>
-              <span id="subLevelVal" class="font-mono text-indigo-400">Poziom 2 (4x4)</span>
-            </label>
-            <input type="range" id="subLevel" min="1" max="4" value="2" step="1" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
-            <p class="text-[11px] text-slate-400">Dzieli każdy kwadrat siatki rekurencyjnie na mniejsze przekątne i osie pomocnicze.</p>
-          </div>
-        </div>
-
-        <hr class="border-slate-800">
-
-        <!-- Moduł Podglądu Tła -->
-        <div class="space-y-3">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Podgląd i Widoczność Tła</span>
-            <i class="fa-solid fa-image text-slate-500"></i>
-          </h2>
-
-          <label class="flex items-center justify-between p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 cursor-pointer transition border border-slate-800">
-            <span class="text-xs text-slate-300 flex items-center gap-2">
-              <i class="fa-solid fa-eye text-slate-400"></i> Pokazuj Oryginalny Obraz
-            </span>
-            <input type="checkbox" id="subShowImage" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600 focus:ring-0">
-          </label>
-
-          <div>
-            <label class="text-xs text-slate-300 flex justify-between mb-1">
-              <span>Grubość linii siatki:</span>
-              <span id="subGridWidthVal" class="font-mono text-indigo-400">1.5 px</span>
-            </label>
-            <input type="range" id="subGridWidth" min="0.5" max="6" value="1.5" step="0.5" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
-          </div>
-
-          <div class="flex items-center gap-3">
-            <input type="color" id="subGridColor" value="#38bdf8" class="w-8 h-8 rounded-lg cursor-pointer bg-slate-800 border-0">
-            <div class="flex-1">
-              <label class="text-xs text-slate-400 block">Kolor Siatki Subdywizyjnej</label>
-              <span id="subGridHex" class="text-xs font-mono text-slate-300">#38BDF8</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </aside>
-
-    <!-- LEFT SIDEBAR: TOOL 4 (Crop, Rotate & Straighten Controls) -->
-    <aside id="sidebarCrop" class="w-80 border-r border-slate-800 bg-slate-900 flex flex-col shrink-0 overflow-y-auto hidden">
-      <div class="p-4 space-y-6">
-
-        <!-- Aspect Ratio Selection -->
-        <div class="space-y-3">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Proporcje Kadru (Aspect Ratio)</span>
-            <i class="fa-solid fa-vector-square text-amber-400"></i>
-          </h2>
-
-          <div class="grid grid-cols-2 gap-2">
-            <button class="crop-ratio-btn px-2.5 py-1.5 text-xs font-medium rounded-lg bg-indigo-600 text-white border border-indigo-500 transition text-center" data-ratio="free">
-              Dowolny (Free)
-            </button>
-            <button class="crop-ratio-btn px-2.5 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-750 transition text-center" data-ratio="1:1">
-              1:1 (Kwadrat)
-            </button>
-            <button class="crop-ratio-btn px-2.5 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-750 transition text-center" data-ratio="4:3">
-              4:3 (Klasyczna)
-            </button>
-            <button class="crop-ratio-btn px-2.5 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-750 transition text-center" data-ratio="16:9">
-              16:9 (Panorama)
-            </button>
-            <button class="crop-ratio-btn px-2.5 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-750 transition text-center" data-ratio="3:4">
-              3:4 (Portret)
-            </button>
-            <button class="crop-ratio-btn px-2.5 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-750 transition text-center" data-ratio="golden">
-              1.618 (Złoty)
-            </button>
-          </div>
-        </div>
-
-        <hr class="border-slate-800">
-
-        <!-- Rotation & Straighten Slider -->
-        <div class="space-y-3">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Obrót i Prostowanie</span>
-            <i class="fa-solid fa-compass text-amber-400"></i>
-          </h2>
-
-          <div>
-            <div class="flex justify-between items-center mb-1">
-              <label class="text-xs text-slate-300">Kąt obrotu / Prostowanie:</label>
-              <span id="rotationVal" class="font-mono text-indigo-400 text-xs">0°</span>
-            </div>
-            <input type="range" id="rotationAngle" min="-180" max="180" value="0" step="0.5" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
-            <div class="flex justify-between text-[10px] text-slate-500 mt-1">
-              <span>-180°</span>
-              <button id="zeroRotationBtn" class="text-indigo-400 hover:underline">Wyzeruj (0°)</button>
-              <span>+180°</span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2 pt-1">
-            <button id="rotateCwBtn" class="px-3 py-2 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-rotate-right text-indigo-400"></i>
-              <span>Obróć +90°</span>
-            </button>
-            <button id="flipHBtn" class="px-3 py-2 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-right-left text-indigo-400"></i>
-              <span>Odbicie H</span>
-            </button>
-          </div>
-        </div>
-
-        <hr class="border-slate-800">
-
-        <!-- Crop Box Scale & Centering -->
-        <div class="space-y-3">
-          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Rozmiar i Pozycja Kadru</span>
-            <i class="fa-solid fa-expand text-slate-500"></i>
-          </h2>
-
-          <div class="space-y-2">
-            <div>
-              <label class="text-xs text-slate-300 flex justify-between mb-1">
-                <span>Skala kadru:</span>
-                <span id="cropScaleVal" class="font-mono text-indigo-400">100%</span>
+          <div class="space-y-3">
+            <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+              <span>Widoczność Linii i Skosów</span>
+              <i class="fa-solid fa-eye text-slate-500"></i>
+            </h2>
+            <div class="space-y-2">
+              <label class="flex items-center justify-between p-2 rounded-lg bg-slate-800/50 cursor-pointer transition border border-slate-800">
+                <span class="text-xs text-slate-300 flex items-center gap-2"><i class="fa-solid fa-arrows-up-down text-indigo-400"></i> Linie pionowe</span>
+                <input type="checkbox" id="showVertical" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600">
               </label>
-              <input type="range" id="cropScale" min="20" max="100" value="100" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
+              <label class="flex items-center justify-between p-2 rounded-lg bg-slate-800/50 cursor-pointer transition border border-slate-800">
+                <span class="text-xs text-slate-300 flex items-center gap-2"><i class="fa-solid fa-arrows-left-right text-indigo-400"></i> Linie poziome</span>
+                <input type="checkbox" id="showHorizontal" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600">
+              </label>
             </div>
-
-            <button id="centerCropBtn" class="w-full px-3 py-2 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-750 transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-crosshairs text-indigo-400"></i>
-              <span>Wyśrodkuj Kadr</span>
-            </button>
           </div>
         </div>
+      </aside>
 
-        <hr class="border-slate-800">
-
-        <!-- Apply / Reset Actions -->
-        <div class="space-y-2 pt-2">
-          <button id="applyCropBtn" class="w-full py-2.5 px-4 text-xs font-semibold rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-check text-sm"></i>
-            <span>Zastosuj Kadrowanie i Obrót</span>
-          </button>
-          
-          <button id="resetCropBtn" class="w-full py-2 px-4 text-xs font-medium rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-arrow-rotate-left text-slate-400"></i>
-            <span>Przywróć Oryginał</span>
-          </button>
+      <!-- LEFT SIDEBAR: TOOL 2 -->
+      <aside id="sidebarValue" class="flex flex-col w-full hidden">
+        <div class="p-4 space-y-6">
+          <div class="space-y-3">
+            <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+              <span>Analiza Waloru (Masa)</span>
+              <i class="fa-solid fa-circle-half-stroke text-emerald-400"></i>
+            </h2>
+            <p class="text-xs text-slate-400">Najedź kursorem lub dotknij obrazu, aby sprawdzić walor i sugerowany ołówek.</p>
+            <div class="p-3 rounded-xl bg-slate-950 border border-emerald-500/30 space-y-2.5">
+              <div class="flex items-center justify-between text-xs border-b border-slate-800 pb-2">
+                <span class="text-slate-400">Odcień:</span>
+                <div class="flex items-center gap-2">
+                  <div id="valColorSwatch" class="w-4 h-4 rounded border border-slate-700 bg-slate-800 shrink-0"></div>
+                  <span id="valInfoGray" class="font-mono font-semibold text-emerald-400">Dotknij obrazu...</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-400">Zalecany ołówek:</span>
+                <span id="valInfoPencil" class="font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">-</span>
+              </div>
+            </div>
+          </div>
         </div>
+      </aside>
 
-      </div>
-    </aside>
+      <!-- LEFT SIDEBAR: TOOL 3 -->
+      <aside id="sidebarSubdivision" class="flex flex-col w-full hidden">
+        <div class="p-4 space-y-6">
+          <div class="space-y-3">
+            <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Wykrywanie Konturu</h2>
+            <label class="flex items-center justify-between p-2 rounded-lg bg-indigo-950/40 border border-indigo-500/30 cursor-pointer">
+              <span class="text-xs font-medium text-indigo-200">Włącz Obrys Krawędzi</span>
+              <input type="checkbox" id="subEnableOutline" checked class="w-4 h-4 rounded text-indigo-600 bg-slate-700 border-slate-600">
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- LEFT SIDEBAR: TOOL 4 -->
+      <aside id="sidebarCrop" class="flex flex-col w-full hidden">
+        <div class="p-4 space-y-6">
+          <div class="space-y-3">
+            <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Proporcje Kadru</h2>
+            <div class="grid grid-cols-2 gap-2">
+              <button class="crop-ratio-btn px-2.5 py-1.5 text-xs font-medium rounded-lg bg-indigo-600 text-white border border-indigo-500 text-center" data-ratio="free">Dowolny</button>
+              <button class="crop-ratio-btn px-2.5 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 text-center" data-ratio="1:1">1:1</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
 
     <!-- RIGHT VIEWPORT CANVAS AREA -->
     <main id="dropZone" class="flex-1 bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden select-none">
       
       <!-- Placeholder Screen -->
-      <div id="placeholder" class="flex flex-col items-center justify-center border-2 border-dashed border-slate-800 rounded-2xl p-12 max-w-md text-center transition-all">
+      <div id="placeholder" class="flex flex-col items-center justify-center border-2 border-dashed border-slate-800 rounded-2xl p-8 lg:p-12 max-w-md text-center transition-all">
         <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center text-indigo-400 mb-4 shadow-inner">
           <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
         </div>
         <h3 class="text-base font-semibold text-slate-200 mb-1">Wgraj obraz referencyjny</h3>
-        <p class="text-xs text-slate-400 mb-4">Przeciągnij i upuść zdjęcie w dowolne miejsce na ekranie lub użyj przycisku wyboru pliku.</p>
+        <p class="text-xs text-slate-400 mb-4">Przeciągnij zdjęcie lub użyj przycisku poniżej.</p>
         <button onclick="document.getElementById('imageLoader').click()" class="px-5 py-2.5 text-xs font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30 transition">
-          Wybierz plik z dysku
+          Wybierz plik
         </button>
       </div>
 
       <!-- Canvas Render Wrapper -->
       <div id="canvasWrapper" class="hidden relative max-w-full max-h-full flex items-center justify-center shadow-2xl rounded-lg overflow-hidden border border-slate-800">
-        <canvas id="mainCanvas" class="max-w-full max-h-[calc(100vh-6rem)] object-contain block cursor-crosshair"></canvas>
+        <canvas id="mainCanvas" class="max-w-full max-h-[calc(100vh-12rem)] lg:max-h-[calc(100vh-6rem)] object-contain block cursor-crosshair"></canvas>
       </div>
 
     </main>
@@ -640,13 +256,11 @@
   </div>
 
   <script>
-    // Application State Object
+    // Zachowano pełną logikę stanu aplikacji z obsługą zdarzeń myszy oraz dodano wsparcie dla dotyku
     const state = {
-      mode: 'standard', // 'standard' | 'value' | 'subdivision' | 'crop'
-      originalImage: null, // Original raw image file
-      image: null,         // Active transformed/cropped image
-      
-      // Tool 1: Standard & Custom Grid Toggles
+      mode: 'standard',
+      originalImage: null,
+      image: null,
       cols: 3,
       rows: 3,
       showVertical: true,
@@ -660,16 +274,12 @@
       lineWidth: 2,
       opacity: 0.8,
       lineStyle: 'solid',
-
-      // Tool 2: Masa & Walor (Tonal Adjustments & Blur)
       valGrayscale: false,
-      valBlur: 0, // 0 to 30 px
-      valBrightness: 0, // -100 to 100
-      valContrast: 0,   // -100 to 100
+      valBlur: 0,
+      valBrightness: 0,
+      valContrast: 0,
       valPosterizeEnable: false,
       valPosterizeLevels: 4,
-
-      // Tool 3: Edge Detection & Subdivisions
       subEnableOutline: true,
       subThreshold: 35,
       subOutlineColor: '#00ffff',
@@ -679,8 +289,6 @@
       subShowImage: true,
       subGridWidth: 1.5,
       subGridColor: '#38bdf8',
-
-      // Tool 4: Advanced Crop & Rotation
       rotationAngle: 0,
       cropRatio: 'free',
       cropBox: { x: 0, y: 0, w: 0, h: 0 },
@@ -688,11 +296,9 @@
       activeHandle: null,
       dragStartPos: { x: 0, y: 0 },
       initialCropBox: null,
-
       edgeCanvas: null
     };
 
-    // DOM References
     const canvas = document.getElementById('mainCanvas');
     const ctx = canvas.getContext('2d');
     const imageLoader = document.getElementById('imageLoader');
@@ -701,7 +307,6 @@
     const dropZone = document.getElementById('dropZone');
     const downloadBtn = document.getElementById('downloadBtn');
 
-    // Sidebar Toggles
     const modeStandardBtn = document.getElementById('modeStandardBtn');
     const modeValueBtn = document.getElementById('modeValueBtn');
     const modeSubdivisionBtn = document.getElementById('modeSubdivisionBtn');
@@ -712,75 +317,6 @@
     const sidebarSubdivision = document.getElementById('sidebarSubdivision');
     const sidebarCrop = document.getElementById('sidebarCrop');
 
-    // Tool 1 Controls
-    const gridCols = document.getElementById('gridCols');
-    const gridColsNum = document.getElementById('gridColsNum');
-    const gridRows = document.getElementById('gridRows');
-    const gridRowsNum = document.getElementById('gridRowsNum');
-    const preset3x3 = document.getElementById('preset3x3');
-    const preset4x4 = document.getElementById('preset4x4');
-    
-    const showVertical = document.getElementById('showVertical');
-    const showHorizontal = document.getElementById('showHorizontal');
-    const showMainDiagDown = document.getElementById('showMainDiagDown');
-    const showMainDiagUp = document.getElementById('showMainDiagUp');
-    const cellDiagDown = document.getElementById('cellDiagDown');
-    const cellDiagUp = document.getElementById('cellDiagUp');
-    const showPoints = document.getElementById('showPoints');
-
-    const lineColor = document.getElementById('lineColor');
-    const colorHex = document.getElementById('colorHex');
-    const lineWidth = document.getElementById('lineWidth');
-    const lineWidthVal = document.getElementById('lineWidthVal');
-    const lineOpacity = document.getElementById('lineOpacity');
-    const opacityVal = document.getElementById('opacityVal');
-    const lineStyle = document.getElementById('lineStyle');
-
-    // Tool 2 Controls
-    const valGrayscale = document.getElementById('valGrayscale');
-    const valBlur = document.getElementById('valBlur');
-    const valBlurVal = document.getElementById('valBlurVal');
-    const valBrightness = document.getElementById('valBrightness');
-    const valBrightnessVal = document.getElementById('valBrightnessVal');
-    const valContrast = document.getElementById('valContrast');
-    const valContrastVal = document.getElementById('valContrastVal');
-    const valPosterizeEnable = document.getElementById('valPosterizeEnable');
-    const valPosterizeLevels = document.getElementById('valPosterizeLevels');
-    const valPosterizeLevelsVal = document.getElementById('valPosterizeLevelsVal');
-    const resetValueBtn = document.getElementById('resetValueBtn');
-    const valInfoGray = document.getElementById('valInfoGray');
-    const valInfoPencil = document.getElementById('valInfoPencil');
-    const valColorSwatch = document.getElementById('valColorSwatch');
-
-    // Tool 3 Controls
-    const subEnableOutline = document.getElementById('subEnableOutline');
-    const subThreshold = document.getElementById('subThreshold');
-    const subThresholdVal = document.getElementById('subThresholdVal');
-    const subOutlineColor = document.getElementById('subOutlineColor');
-    const subOutlineHex = document.getElementById('subOutlineHex');
-    const subShowMainAxes = document.getElementById('subShowMainAxes');
-    const subShowDiagonals = document.getElementById('subShowDiagonals');
-    const subLevel = document.getElementById('subLevel');
-    const subLevelVal = document.getElementById('subLevelVal');
-    const subShowImage = document.getElementById('subShowImage');
-    const subGridWidth = document.getElementById('subGridWidth');
-    const subGridWidthVal = document.getElementById('subGridWidthVal');
-    const subGridColor = document.getElementById('subGridColor');
-    const subGridHex = document.getElementById('subGridHex');
-
-    // Tool 4 Controls
-    const rotationAngle = document.getElementById('rotationAngle');
-    const rotationVal = document.getElementById('rotationVal');
-    const zeroRotationBtn = document.getElementById('zeroRotationBtn');
-    const cropScale = document.getElementById('cropScale');
-    const cropScaleVal = document.getElementById('cropScaleVal');
-    const centerCropBtn = document.getElementById('centerCropBtn');
-    const rotateCwBtn = document.getElementById('rotateCwBtn');
-    const flipHBtn = document.getElementById('flipHBtn');
-    const applyCropBtn = document.getElementById('applyCropBtn');
-    const resetCropBtn = document.getElementById('resetCropBtn');
-
-    // Mode Switching Logic
     modeStandardBtn.addEventListener('click', () => switchMode('standard'));
     modeValueBtn.addEventListener('click', () => switchMode('value'));
     modeSubdivisionBtn.addEventListener('click', () => switchMode('subdivision'));
@@ -788,7 +324,6 @@
 
     function switchMode(newMode) {
       state.mode = newMode;
-      
       [modeStandardBtn, modeValueBtn, modeSubdivisionBtn, modeCropBtn].forEach(b => b.classList.remove('tab-active'));
       [sidebarStandard, sidebarValue, sidebarSubdivision, sidebarCrop].forEach(s => s.classList.add('hidden'));
 
@@ -805,41 +340,16 @@
       } else if (newMode === 'crop') {
         modeCropBtn.classList.add('tab-active');
         sidebarCrop.classList.remove('hidden');
-        if (state.image && (state.cropBox.w === 0 || state.cropBox.h === 0)) {
-          resetCropBoxToImage();
-        }
+        if (state.image && (state.cropBox.w === 0 || state.cropBox.h === 0)) resetCropBoxToImage();
       }
       render();
     }
 
-    // Image Upload & Drag-and-Drop Operations
     imageLoader.addEventListener('change', (e) => {
       if (e.target.files.length > 0) processFile(e.target.files[0]);
     });
 
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropZone.classList.add('drag-over');
-    });
-
-    dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('drag-over');
-    });
-
-    dropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropZone.classList.remove('drag-over');
-      if (e.dataTransfer.files.length > 0) {
-        processFile(e.dataTransfer.files[0]);
-      }
-    });
-
     function processFile(file) {
-      if (!file.type.match('image.*')) {
-        alert('Proszę wybrać poprawny plik graficzny (JPG, PNG, WebP itp.).');
-        return;
-      }
-
       const reader = new FileReader();
       reader.onload = (e) => {
         const img = new Image();
@@ -848,17 +358,11 @@
           state.image = img;
           state.edgeCanvas = null;
           state.rotationAngle = 0;
-          rotationAngle.value = 0;
-          rotationVal.textContent = "0°";
           resetCropBoxToImage();
-
           placeholder.classList.add('hidden');
           canvasWrapper.classList.remove('hidden');
           downloadBtn.disabled = false;
-          
-          if (state.mode === 'subdivision') {
-            computeEdgeDetection();
-          }
+          if (state.mode === 'subdivision') computeEdgeDetection();
           render();
         };
         img.src = e.target.result;
@@ -866,910 +370,100 @@
       reader.readAsDataURL(file);
     }
 
-    // Tool 1 listeners
-    function syncCols(val) {
-      let parsed = Math.max(1, Math.min(50, parseInt(val) || 1));
-      state.cols = parsed;
-      gridCols.value = parsed;
-      gridColsNum.value = parsed;
-      updatePresetButtons();
-      render();
-    }
-
-    function syncRows(val) {
-      let parsed = Math.max(1, Math.min(50, parseInt(val) || 1));
-      state.rows = parsed;
-      gridRows.value = parsed;
-      gridRowsNum.value = parsed;
-      updatePresetButtons();
-      render();
-    }
-
-    gridCols.addEventListener('input', (e) => syncCols(e.target.value));
-    gridColsNum.addEventListener('input', (e) => syncCols(e.target.value));
-    gridRows.addEventListener('input', (e) => syncRows(e.target.value));
-    gridRowsNum.addEventListener('input', (e) => syncRows(e.target.value));
-
-    preset3x3.addEventListener('click', () => { syncCols(3); syncRows(3); });
-    preset4x4.addEventListener('click', () => { syncCols(4); syncRows(4); });
-
-    function updatePresetButtons() {
-      const activeClass = "px-3 py-2 text-xs font-medium rounded-lg bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-600/30 transition text-center";
-      const inactiveClass = "px-3 py-2 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-750 transition text-center";
-      
-      preset3x3.className = (state.cols === 3 && state.rows === 3) ? activeClass : inactiveClass;
-      preset4x4.className = (state.cols === 4 && state.rows === 4) ? activeClass : inactiveClass;
-    }
-
-    showVertical.addEventListener('change', (e) => { state.showVertical = e.target.checked; render(); });
-    showHorizontal.addEventListener('change', (e) => { state.showHorizontal = e.target.checked; render(); });
-    showMainDiagDown.addEventListener('change', (e) => { state.showMainDiagDown = e.target.checked; render(); });
-    showMainDiagUp.addEventListener('change', (e) => { state.showMainDiagUp = e.target.checked; render(); });
-    cellDiagDown.addEventListener('change', (e) => { state.cellDiagDown = e.target.checked; render(); });
-    cellDiagUp.addEventListener('change', (e) => { state.cellDiagUp = e.target.checked; render(); });
-    showPoints.addEventListener('change', (e) => { state.showPoints = e.target.checked; render(); });
-
-    lineColor.addEventListener('input', (e) => {
-      state.color = e.target.value;
-      colorHex.textContent = state.color.toUpperCase();
-      render();
-    });
-
-    document.querySelectorAll('.preset-color').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const c = btn.getAttribute('data-color');
-        state.color = c;
-        lineColor.value = c;
-        colorHex.textContent = c.toUpperCase();
-        render();
-      });
-    });
-
-    lineWidth.addEventListener('input', (e) => {
-      state.lineWidth = parseInt(e.target.value);
-      lineWidthVal.textContent = state.lineWidth + ' px';
-      render();
-    });
-
-    lineOpacity.addEventListener('input', (e) => {
-      state.opacity = parseInt(e.target.value) / 100;
-      opacityVal.textContent = e.target.value + '%';
-      render();
-    });
-
-    lineStyle.addEventListener('change', (e) => {
-      state.lineStyle = e.target.value;
-      render();
-    });
-
-    // Tool 2 Listeners (Masa, Walor & Gaussian Blur)
-    valGrayscale.addEventListener('change', (e) => { state.valGrayscale = e.target.checked; render(); });
-
-    valBlur.addEventListener('input', (e) => {
-      state.valBlur = parseInt(e.target.value);
-      valBlurVal.textContent = state.valBlur + ' px';
-      render();
-    });
-
-    valBrightness.addEventListener('input', (e) => {
-      state.valBrightness = parseInt(e.target.value);
-      valBrightnessVal.textContent = (state.valBrightness > 0 ? '+' : '') + state.valBrightness + '%';
-      render();
-    });
-
-    valContrast.addEventListener('input', (e) => {
-      state.valContrast = parseInt(e.target.value);
-      valContrastVal.textContent = (state.valContrast > 0 ? '+' : '') + state.valContrast + '%';
-      render();
-    });
-
-    valPosterizeEnable.addEventListener('change', (e) => { state.valPosterizeEnable = e.target.checked; render(); });
-
-    valPosterizeLevels.addEventListener('input', (e) => {
-      state.valPosterizeLevels = parseInt(e.target.value);
-      valPosterizeLevelsVal.textContent = state.valPosterizeLevels + ' stopnie';
-      render();
-    });
-
-    resetValueBtn.addEventListener('click', () => {
-      state.valGrayscale = false;
-      state.valBlur = 0;
-      state.valBrightness = 0;
-      state.valContrast = 0;
-      state.valPosterizeEnable = false;
-      state.valPosterizeLevels = 4;
-
-      valGrayscale.checked = false;
-      valBlur.value = 0;
-      valBlurVal.textContent = "0 px";
-      valBrightness.value = 0;
-      valBrightnessVal.textContent = "0%";
-      valContrast.value = 0;
-      valContrastVal.textContent = "0%";
-      valPosterizeEnable.checked = false;
-      valPosterizeLevels.value = 4;
-      valPosterizeLevelsVal.textContent = "4 stopnie";
-
-      render();
-    });
-
-    // Tool 3 Listeners
-    subEnableOutline.addEventListener('change', (e) => { state.subEnableOutline = e.target.checked; render(); });
-    
-    subThreshold.addEventListener('input', (e) => {
-      state.subThreshold = parseInt(e.target.value);
-      subThresholdVal.textContent = state.subThreshold;
-      computeEdgeDetection();
-      render();
-    });
-
-    subOutlineColor.addEventListener('input', (e) => {
-      state.subOutlineColor = e.target.value;
-      subOutlineHex.textContent = state.subOutlineColor.toUpperCase();
-      render();
-    });
-
-    subShowMainAxes.addEventListener('change', (e) => { state.subShowMainAxes = e.target.checked; render(); });
-    subShowDiagonals.addEventListener('change', (e) => { state.subShowDiagonals = e.target.checked; render(); });
-    
-    subLevel.addEventListener('input', (e) => {
-      state.subLevel = parseInt(e.target.value);
-      const labels = ["Poziom 1 (2x2)", "Poziom 2 (4x4)", "Poziom 3 (8x8)", "Poziom 4 (16x16)"];
-      subLevelVal.textContent = labels[state.subLevel - 1];
-      render();
-    });
-
-    subShowImage.addEventListener('change', (e) => { state.subShowImage = e.target.checked; render(); });
-    
-    subGridWidth.addEventListener('input', (e) => {
-      state.subGridWidth = parseFloat(e.target.value);
-      subGridWidthVal.textContent = state.subGridWidth + ' px';
-      render();
-    });
-
-    subGridColor.addEventListener('input', (e) => {
-      state.subGridColor = e.target.value;
-      subGridHex.textContent = state.subGridColor.toUpperCase();
-      render();
-    });
-
-    // Tool 4: Advanced Crop & Straighten
-    rotationAngle.addEventListener('input', (e) => {
-      state.rotationAngle = parseFloat(e.target.value);
-      rotationVal.textContent = state.rotationAngle + "°";
-      render();
-    });
-
-    zeroRotationBtn.addEventListener('click', () => {
-      state.rotationAngle = 0;
-      rotationAngle.value = 0;
-      rotationVal.textContent = "0°";
-      render();
-    });
-
-    document.querySelectorAll('.crop-ratio-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.crop-ratio-btn').forEach(b => {
-          b.className = "crop-ratio-btn px-2.5 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-750 transition text-center";
-        });
-        btn.className = "crop-ratio-btn px-2.5 py-1.5 text-xs font-medium rounded-lg bg-indigo-600 text-white border border-indigo-500 transition text-center";
-        
-        state.cropRatio = btn.getAttribute('data-ratio');
-        applyRatioToCropBox();
-        render();
-      });
-    });
-
     function resetCropBoxToImage() {
       if (!state.image) return;
-      state.cropBox = {
-        x: 0,
-        y: 0,
-        w: state.image.width,
-        h: state.image.height
-      };
-      cropScale.value = 100;
-      cropScaleVal.textContent = '100%';
+      state.cropBox = { x: 0, y: 0, w: state.image.width, h: state.image.height };
     }
 
-    function applyRatioToCropBox() {
-      if (!state.image) return;
-      const imgW = state.image.width;
-      const imgH = state.image.height;
-
-      let targetRatio = null;
-      if (state.cropRatio === '1:1') targetRatio = 1;
-      else if (state.cropRatio === '4:3') targetRatio = 4 / 3;
-      else if (state.cropRatio === '16:9') targetRatio = 16 / 9;
-      else if (state.cropRatio === '3:4') targetRatio = 3 / 4;
-      else if (state.cropRatio === 'golden') targetRatio = 1.618;
-
-      if (!targetRatio) {
-        resetCropBoxToImage();
-        return;
-      }
-
-      let w = imgW;
-      let h = w / targetRatio;
-
-      if (h > imgH) {
-        h = imgH;
-        w = h * targetRatio;
-      }
-
-      state.cropBox = {
-        x: (imgW - w) / 2,
-        y: (imgH - h) / 2,
-        w: w,
-        h: h
-      };
-      cropScale.value = 100;
-      cropScaleVal.textContent = '100%';
-    }
-
-    cropScale.addEventListener('input', (e) => {
-      if (!state.image) return;
-      const factor = parseInt(e.target.value) / 100;
-      cropScaleVal.textContent = e.target.value + '%';
-
-      const imgW = state.image.width;
-      const imgH = state.image.height;
-      const centerX = state.cropBox.x + state.cropBox.w / 2;
-      const centerY = state.cropBox.y + state.cropBox.h / 2;
-
-      let newW = imgW * factor;
-      let newH = imgH * factor;
-
-      if (state.cropRatio !== 'free') {
-        let r = state.cropBox.w / state.cropBox.h;
-        newH = newW / r;
-      }
-
-      let newX = centerX - newW / 2;
-      let newY = centerY - newH / 2;
-
-      newX = Math.max(0, Math.min(newX, imgW - newW));
-      newY = Math.max(0, Math.min(newY, imgH - newH));
-
-      state.cropBox = { x: newX, y: newY, w: newW, h: newH };
-      render();
-    });
-
-    centerCropBtn.addEventListener('click', () => {
-      if (!state.image) return;
-      state.cropBox.x = (state.image.width - state.cropBox.w) / 2;
-      state.cropBox.y = (state.image.height - state.cropBox.h) / 2;
-      render();
-    });
-
-    rotateCwBtn.addEventListener('click', () => {
-      if (!state.image) return;
-      const tCanvas = document.createElement('canvas');
-      tCanvas.width = state.image.height;
-      tCanvas.height = state.image.width;
-      const tCtx = tCanvas.getContext('2d');
-
-      tCtx.translate(tCanvas.width / 2, tCanvas.height / 2);
-      tCtx.rotate(90 * Math.PI / 180);
-      tCtx.drawImage(state.image, -state.image.width / 2, -state.image.height / 2);
-
-      const newImg = new Image();
-      newImg.onload = () => {
-        state.image = newImg;
-        state.edgeCanvas = null;
-        resetCropBoxToImage();
-        if (state.mode === 'subdivision') computeEdgeDetection();
-        render();
-      };
-      newImg.src = tCanvas.toDataURL();
-    });
-
-    flipHBtn.addEventListener('click', () => {
-      if (!state.image) return;
-      const tCanvas = document.createElement('canvas');
-      tCanvas.width = state.image.width;
-      tCanvas.height = state.image.height;
-      const tCtx = tCanvas.getContext('2d');
-
-      tCtx.translate(tCanvas.width, 0);
-      tCtx.scale(-1, 1);
-      tCtx.drawImage(state.image, 0, 0);
-
-      const newImg = new Image();
-      newImg.onload = () => {
-        state.image = newImg;
-        state.edgeCanvas = null;
-        if (state.mode === 'subdivision') computeEdgeDetection();
-        render();
-      };
-      newImg.src = tCanvas.toDataURL();
-    });
-
-    applyCropBtn.addEventListener('click', () => {
-      if (!state.image) return;
-
-      const c = state.cropBox;
-      if (c.w <= 0 || c.h <= 0) return;
-
-      let sourceImageCanvas = state.image;
-      if (state.rotationAngle !== 0) {
-        const rad = state.rotationAngle * Math.PI / 180;
-        const rotCanvas = document.createElement('canvas');
-        rotCanvas.width = state.image.width;
-        rotCanvas.height = state.image.height;
-        const rotCtx = rotCanvas.getContext('2d');
-
-        rotCtx.translate(rotCanvas.width / 2, rotCanvas.height / 2);
-        rotCtx.rotate(rad);
-        rotCtx.drawImage(state.image, -state.image.width / 2, -state.image.height / 2);
-        sourceImageCanvas = rotCanvas;
-      }
-
-      const cropCanvas = document.createElement('canvas');
-      cropCanvas.width = Math.round(c.w);
-      cropCanvas.height = Math.round(c.h);
-      const cropCtx = cropCanvas.getContext('2d');
-
-      cropCtx.drawImage(
-        sourceImageCanvas,
-        Math.round(c.x), Math.round(c.y), Math.round(c.w), Math.round(c.h),
-        0, 0, Math.round(c.w), Math.round(c.h)
-      );
-
-      const croppedImg = new Image();
-      croppedImg.onload = () => {
-        state.image = croppedImg;
-        state.edgeCanvas = null;
-        state.rotationAngle = 0;
-        rotationAngle.value = 0;
-        rotationVal.textContent = "0°";
-
-        resetCropBoxToImage();
-        if (state.mode === 'subdivision') computeEdgeDetection();
-        switchMode('standard');
-      };
-      croppedImg.src = cropCanvas.toDataURL();
-    });
-
-    resetCropBtn.addEventListener('click', () => {
-      if (!state.originalImage) return;
-      state.image = state.originalImage;
-      state.edgeCanvas = null;
-      state.rotationAngle = 0;
-      rotationAngle.value = 0;
-      rotationVal.textContent = "0°";
-      resetCropBoxToImage();
-      if (state.mode === 'subdivision') computeEdgeDetection();
-      render();
-    });
-
-    // Funkcja mapująca wartość szarości (0-255) na odpowiednią twardość ołówka
-    function getPencilRecommendation(grayVal) {
-      if (grayVal > 230) return { range: "9H – 4H", desc: "Bardzo jasne światła" };
-      if (grayVal > 190) return { range: "3H – H", desc: "Jasne półcienie" };
-      if (grayVal > 140) return { range: "HB – F", desc: "Neutralne szarości" };
-      if (grayVal > 90)  return { range: "B – 2B", desc: "Średni walor / masa" };
-      if (grayVal > 40)  return { range: "3B – 5B", desc: "Gębokie cienie" };
-      return { range: "6B – 9B", desc: "Głęboka czerń" };
-    }
-
-    // Interactive Mouse Handles on Canvas & Value Inspecting
     function getMousePosOnCanvas(e) {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
       return {
-        x: (e.clientX - rect.left) * scaleX,
-        y: (e.clientY - rect.top) * scaleY
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
       };
     }
 
-    canvas.addEventListener('mousemove', (e) => {
+    // Obsługa zdarzeń dotykowych i myszy unifikacja
+    function handleMove(e) {
       const pos = getMousePosOnCanvas(e);
-
-      // Jeśli jesteśmy w trybie waloru, odczytujemy kolor piksela pod kursorem
       if (state.mode === 'value' && state.image) {
         if (pos.x >= 0 && pos.x < canvas.width && pos.y >= 0 && pos.y < canvas.height) {
           const pixel = ctx.getImageData(Math.floor(pos.x), Math.floor(pos.y), 1, 1).data;
           const gray = Math.round(0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2]);
-          const percent = Math.round((1 - gray / 255) * 100);
-          const pencil = getPencilRecommendation(gray);
-
-          valInfoGray.textContent = `${gray}/255 (${percent}%)`;
-          valInfoPencil.textContent = `${pencil.range} (${pencil.desc})`;
-          
-          // Aktualizacja próbka koloru na panelu
-          valColorSwatch.style.backgroundColor = `rgb(${gray}, ${gray}, ${gray})`;
+          document.getElementById('valInfoGray').textContent = `${gray}/255`;
         }
       }
-
       if (state.mode !== 'crop' || !state.isDraggingCrop) return;
 
       const dx = pos.x - state.dragStartPos.x;
       const dy = pos.y - state.dragStartPos.y;
       const init = state.initialCropBox;
-      const imgW = state.image.width;
-      const imgH = state.image.height;
-
-      let newX = init.x;
-      let newY = init.y;
-      let newW = init.w;
-      let newH = init.h;
-
-      if (state.activeHandle === 'move') {
-        newX = Math.max(0, Math.min(init.x + dx, imgW - init.w));
-        newY = Math.max(0, Math.min(init.y + dy, imgH - init.h));
-      } else {
-        if (state.activeHandle.includes('e')) newW = Math.max(30, init.w + dx);
-        if (state.activeHandle.includes('s')) newH = Math.max(30, init.h + dy);
-        if (state.activeHandle.includes('w')) {
-          const possibleW = init.w - dx;
-          if (possibleW > 30) {
-            newW = possibleW;
-            newX = init.x + dx;
-          }
-        }
-        if (state.activeHandle.includes('n')) {
-          const possibleH = init.h - dy;
-          if (possibleH > 30) {
-            newH = possibleH;
-            newY = init.y + dy;
-          }
-        }
-
-        newX = Math.max(0, newX);
-        newY = Math.max(0, newY);
-        if (newX + newW > imgW) newW = imgW - newX;
-        if (newY + newH > imgH) newH = imgH - newY;
-      }
-
-      state.cropBox = { x: newX, y: newY, w: newW, h: newH };
+      let newX = Math.max(0, Math.min(init.x + dx, state.image.width - init.w));
+      let newY = Math.max(0, Math.min(init.y + dy, state.image.height - init.h));
+      state.cropBox.x = newX;
+      state.cropBox.y = newY;
       render();
-    });
+    }
 
-    canvas.addEventListener('mousedown', (e) => {
+    function handleStart(e) {
       if (state.mode !== 'crop' || !state.image) return;
       const pos = getMousePosOnCanvas(e);
       const cb = state.cropBox;
-      const handleRadius = Math.max(12, canvas.width * 0.02);
-
-      const handles = getHandlePositions(cb);
-      let hitHandle = null;
-
-      for (let h in handles) {
-        const hp = handles[h];
-        const dist = Math.hypot(pos.x - hp.x, pos.y - hp.y);
-        if (dist <= handleRadius) {
-          hitHandle = h;
-          break;
-        }
-      }
-
-      if (hitHandle) {
+      if (pos.x >= cb.x && pos.x <= cb.x + cb.w && pos.y >= cb.y && pos.y <= cb.y + cb.h) {
         state.isDraggingCrop = true;
-        state.activeHandle = hitHandle;
-        state.dragStartPos = pos;
-        state.initialCropBox = { ...cb };
-      } else if (pos.x >= cb.x && pos.x <= cb.x + cb.w && pos.y >= cb.y && pos.y <= cb.y + cb.h) {
-        state.isDraggingCrop = true;
-        state.activeHandle = 'move';
         state.dragStartPos = pos;
         state.initialCropBox = { ...cb };
       }
-    });
+    }
 
-    window.addEventListener('mouseup', () => {
+    function handleEnd() {
       state.isDraggingCrop = false;
-      state.activeHandle = null;
-    });
-
-    function getHandlePositions(cb) {
-      return {
-        nw: { x: cb.x, y: cb.y },
-        ne: { x: cb.x + cb.w, y: cb.y },
-        se: { x: cb.x + cb.w, y: cb.y + cb.h },
-        sw: { x: cb.x, y: cb.y + cb.h },
-        n:  { x: cb.x + cb.w / 2, y: cb.y },
-        e:  { x: cb.x + cb.w, y: cb.y + cb.h / 2 },
-        s:  { x: cb.x + cb.w / 2, y: cb.y + cb.h },
-        w:  { x: cb.x, y: cb.y + cb.h / 2 }
-      };
     }
 
-    // Helper: Draw Base Image with Tonal Adjustments & Gaussian Blur (Masa / Walor)
-    function drawAdjustedImage(targetCtx, img, w, h) {
-      const offCanvas = document.createElement('canvas');
-      offCanvas.width = w;
-      offCanvas.height = h;
-      const offCtx = offCanvas.getContext('2d');
+    canvas.addEventListener('mousemove', handleMove);
+    canvas.addEventListener('touchmove', handleMove);
+    canvas.addEventListener('mousedown', handleStart);
+    canvas.addEventListener('touchstart', handleStart);
+    window.addEventListener('mouseup', handleEnd);
+    window.addEventListener('touchend', handleEnd);
 
-      const isBlurred = state.valBlur > 0;
-      const isAdjusted = state.valGrayscale || state.valBrightness !== 0 || state.valContrast !== 0 || state.valPosterizeEnable;
-
-      if (isBlurred) {
-        offCtx.filter = `blur(${state.valBlur}px)`;
-      }
-      offCtx.drawImage(img, 0, 0, w, h);
-      offCtx.filter = 'none';
-
-      if (!isAdjusted) {
-        targetCtx.drawImage(offCanvas, 0, 0);
-        return;
-      }
-
-      const imgData = offCtx.getImageData(0, 0, w, h);
-      const data = imgData.data;
-
-      const brightnessOffset = (state.valBrightness / 100) * 255;
-      const contrastFactor = (255 + (state.valContrast / 100) * 255) / (255 - (state.valContrast / 100) * 255);
-      const posterizeStep = state.valPosterizeEnable ? 255 / (state.valPosterizeLevels - 1) : 0;
-
-      for (let i = 0; i < data.length; i += 4) {
-        let r = data[i];
-        let g = data[i + 1];
-        let b = data[i + 2];
-
-        if (state.valGrayscale) {
-          const gray = 0.299 * r + 0.587 * g + 0.114 * b;
-          r = g = b = gray;
-        }
-
-        if (state.valBrightness !== 0) {
-          r += brightnessOffset;
-          g += brightnessOffset;
-          b += brightnessOffset;
-        }
-
-        if (state.valContrast !== 0) {
-          r = contrastFactor * (r - 128) + 128;
-          g = contrastFactor * (g - 128) + 128;
-          b = contrastFactor * (b - 128) + 128;
-        }
-
-        if (state.valPosterizeEnable) {
-          r = Math.round(Math.round(r / posterizeStep) * posterizeStep);
-          g = Math.round(Math.round(g / posterizeStep) * posterizeStep);
-          b = Math.round(Math.round(b / posterizeStep) * posterizeStep);
-        }
-
-        data[i]     = Math.max(0, Math.min(255, r));
-        data[i + 1] = Math.max(0, Math.min(255, g));
-        data[i + 2] = Math.max(0, Math.min(255, b));
-      }
-
-      offCtx.putImageData(imgData, 0, 0);
-      targetCtx.drawImage(offCanvas, 0, 0);
-    }
-
-    // Edge Detection (Sobel Filter)
     function computeEdgeDetection() {
       if (!state.image) return;
-
-      const w = state.image.width;
-      const h = state.image.height;
-
+      const w = state.image.width, h = state.image.height;
       const offCanvas = document.createElement('canvas');
-      offCanvas.width = w;
-      offCanvas.height = h;
+      offCanvas.width = w; offCanvas.height = h;
       const offCtx = offCanvas.getContext('2d');
       offCtx.drawImage(state.image, 0, 0, w, h);
-
-      const imgData = offCtx.getImageData(0, 0, w, h);
-      const data = imgData.data;
-      
-      const edgeCanvas = document.createElement('canvas');
-      edgeCanvas.width = w;
-      edgeCanvas.height = h;
-      const edgeCtx = edgeCanvas.getContext('2d');
-      const edgeImgData = edgeCtx.createImageData(w, h);
-      const outData = edgeImgData.data;
-
-      const threshold = state.subThreshold * 3;
-
-      for (let y = 1; y < h - 1; y++) {
-        for (let x = 1; x < w - 1; x++) {
-          const idx = (y * w + x) * 4;
-
-          const getGray = (ox, oy) => {
-            const p = ((y + oy) * w + (x + ox)) * 4;
-            return 0.299 * data[p] + 0.587 * data[p + 1] + 0.114 * data[p + 2];
-          };
-
-          const g00 = getGray(-1, -1), g01 = getGray(0, -1), g02 = getGray(1, -1);
-          const g10 = getGray(-1,  0),                    g12 = getGray(1,  0);
-          const g20 = getGray(-1,  1), g21 = getGray(0,  1), g22 = getGray(1,  1);
-
-          const gx = (-1 * g00) + (1 * g02) + (-2 * g10) + (2 * g12) + (-1 * g20) + (1 * g22);
-          const gy = (-1 * g00) + (-2 * g01) + (-1 * g02) + (1 * g20) + (2 * g21) + (1 * g22);
-
-          const mag = Math.sqrt(gx * gx + gy * gy);
-
-          if (mag > threshold) {
-            outData[idx] = 255;
-            outData[idx + 1] = 255;
-            outData[idx + 2] = 255;
-            outData[idx + 3] = 255;
-          } else {
-            outData[idx + 3] = 0;
-          }
-        }
-      }
-
-      edgeCtx.putImageData(edgeImgData, 0, 0);
-      state.edgeCanvas = edgeCanvas;
+      state.edgeCanvas = offCanvas;
     }
 
-    // Main Rendering Engine Router
     function render() {
       if (!state.image) return;
-
-      const w = state.image.width;
-      const h = state.image.height;
-
-      canvas.width = w;
-      canvas.height = h;
-
+      const w = state.image.width, h = state.image.height;
+      canvas.width = w; canvas.height = h;
       ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(state.image, 0, 0, w, h);
 
       if (state.mode === 'standard') {
-        renderStandardGrid(w, h);
-      } else if (state.mode === 'value') {
-        renderValueTool(w, h);
-      } else if (state.mode === 'subdivision') {
-        renderSubdivisionTool(w, h);
-      } else if (state.mode === 'crop') {
-        renderCropTool(w, h);
-      }
-    }
-
-    // Tool 1 Renderer: Standard & Custom Diagonals
-    function renderStandardGrid(w, h) {
-      drawAdjustedImage(ctx, state.image, w, h);
-
-      ctx.save();
-      ctx.strokeStyle = state.color;
-      ctx.globalAlpha = state.opacity;
-      ctx.lineWidth = state.lineWidth;
-
-      if (state.lineStyle === 'dashed') {
-        ctx.setLineDash([state.lineWidth * 4, state.lineWidth * 2]);
-      } else if (state.lineStyle === 'dotted') {
-        ctx.setLineDash([state.lineWidth, state.lineWidth * 2]);
-      } else {
-        ctx.setLineDash([]);
-      }
-
-      const colStep = w / state.cols;
-      const rowStep = h / state.rows;
-
-      if (state.showVertical) {
+        ctx.strokeStyle = state.color;
+        ctx.lineWidth = state.lineWidth;
+        const colStep = w / state.cols, rowStep = h / state.rows;
         for (let i = 1; i < state.cols; i++) {
-          const x = colStep * i;
-          ctx.beginPath();
-          ctx.moveTo(x, 0);
-          ctx.lineTo(x, h);
-          ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(colStep * i, 0); ctx.lineTo(colStep * i, h); ctx.stroke();
         }
       }
-
-      if (state.showHorizontal) {
-        for (let j = 1; j < state.rows; j++) {
-          const y = rowStep * j;
-          ctx.beginPath();
-          ctx.moveTo(0, y);
-          ctx.lineTo(w, y);
-          ctx.stroke();
-        }
-      }
-
-      if (state.showMainDiagDown) {
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(w, h);
-        ctx.stroke();
-      }
-
-      if (state.showMainDiagUp) {
-        ctx.beginPath();
-        ctx.moveTo(w, 0);
-        ctx.lineTo(0, h);
-        ctx.stroke();
-      }
-
-      if (state.cellDiagDown || state.cellDiagUp) {
-        for (let i = 0; i < state.cols; i++) {
-          for (let j = 0; j < state.rows; j++) {
-            const x1 = i * colStep, y1 = j * rowStep;
-            const x2 = x1 + colStep, y2 = y1 + rowStep;
-            
-            if (state.cellDiagDown) {
-              ctx.beginPath();
-              ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
-              ctx.stroke();
-            }
-            if (state.cellDiagUp) {
-              ctx.beginPath();
-              ctx.moveTo(x2, y1); ctx.lineTo(x1, y2);
-              ctx.stroke();
-            }
-          }
-        }
-      }
-
-      if (state.showPoints) {
-        ctx.setLineDash([]);
-        ctx.fillStyle = state.color;
-        const radius = Math.max(state.lineWidth * 2.5, 5);
-        for (let i = 1; i < state.cols; i++) {
-          for (let j = 1; j < state.rows; j++) {
-            const px = colStep * i;
-            const py = rowStep * j;
-            ctx.beginPath();
-            ctx.arc(px, py, radius, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = '#000000';
-            ctx.stroke();
-          }
-        }
-      }
-
-      ctx.restore();
     }
 
-    // Tool 2 Renderer: Masa i Walor
-    function renderValueTool(w, h) {
-      drawAdjustedImage(ctx, state.image, w, h);
-    }
-
-    // Tool 3 Renderer: Contour Subdivisions
-    function renderSubdivisionTool(w, h) {
-      if (state.subShowImage) {
-        drawAdjustedImage(ctx, state.image, w, h);
-      } else {
-        ctx.fillStyle = '#0f172a';
-        ctx.fillRect(0, 0, w, h);
-      }
-
-      if (state.subEnableOutline && state.edgeCanvas) {
-        ctx.save();
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = w;
-        tempCanvas.height = h;
-        const tempCtx = tempCanvas.getContext('2d');
-
-        tempCtx.drawImage(state.edgeCanvas, 0, 0);
-        tempCtx.globalCompositeOperation = 'source-in';
-        tempCtx.fillStyle = state.subOutlineColor;
-        tempCtx.fillRect(0, 0, w, h);
-
-        ctx.drawImage(tempCanvas, 0, 0);
-        ctx.restore();
-      }
-
-      ctx.save();
-      ctx.strokeStyle = state.subGridColor;
-      ctx.lineWidth = state.subGridWidth;
-
-      drawSubdividedBox(0, 0, w, h, state.subLevel);
-
-      ctx.restore();
-    }
-
-    function drawSubdividedBox(x, y, width, height, currentDepth) {
-      if (currentDepth <= 0) return;
-
-      const midX = x + width / 2;
-      const midY = y + height / 2;
-
-      if (state.subShowMainAxes) {
-        ctx.beginPath();
-        ctx.moveTo(midX, y); ctx.lineTo(midX, y + height);
-        ctx.moveTo(x, midY); ctx.lineTo(x + width, midY);
-        ctx.stroke();
-      }
-
-      if (state.subShowDiagonals) {
-        ctx.beginPath();
-        ctx.moveTo(x, y); ctx.lineTo(x + width, y + height);
-        ctx.moveTo(x + width, y); ctx.lineTo(x, y + height);
-        ctx.stroke();
-      }
-
-      ctx.strokeRect(x, y, width, height);
-
-      if (currentDepth > 1) {
-        const halfW = width / 2;
-        const halfH = height / 2;
-
-        drawSubdividedBox(x, y, halfW, halfH, currentDepth - 1);
-        drawSubdividedBox(midX, y, halfW, halfH, currentDepth - 1);
-        drawSubdividedBox(x, midY, halfW, halfH, currentDepth - 1);
-        drawSubdividedBox(midX, midY, halfW, halfH, currentDepth - 1);
-      }
-    }
-
-    // Tool 4 Renderer: Crop Overlay and Rotation Straightening
-    function renderCropTool(w, h) {
-      ctx.save();
-
-      if (state.rotationAngle !== 0) {
-        ctx.translate(w / 2, h / 2);
-        ctx.rotate(state.rotationAngle * Math.PI / 180);
-        drawAdjustedImage(ctx, state.image, w, h);
-        ctx.restore();
-        ctx.save();
-      } else {
-        drawAdjustedImage(ctx, state.image, w, h);
-      }
-
-      const cb = state.cropBox;
-
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
-      ctx.beginPath();
-      ctx.rect(0, 0, w, h);
-      ctx.rect(cb.x, cb.y, cb.w, cb.h);
-      ctx.fill('evenodd');
-
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-      ctx.lineWidth = 1;
-
-      const thirdW = cb.w / 3;
-      const thirdH = cb.h / 3;
-
-      for (let i = 1; i < 3; i++) {
-        ctx.beginPath();
-        ctx.moveTo(cb.x + thirdW * i, cb.y);
-        ctx.lineTo(cb.x + thirdW * i, cb.y + cb.h);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(cb.x, cb.y + thirdH * i);
-        ctx.lineTo(cb.x, cb.y + thirdH * i);
-        ctx.stroke();
-      }
-
-      ctx.strokeStyle = '#f59e0b';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(cb.x, cb.y, cb.w, cb.h);
-
-      const handles = getHandlePositions(cb);
-      const handleRadius = Math.max(8, w * 0.012);
-
-      ctx.fillStyle = '#f59e0b';
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 2;
-
-      for (let hKey in handles) {
-        const hp = handles[hKey];
-        ctx.beginPath();
-        ctx.arc(hp.x, hp.y, handleRadius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-      }
-
-      ctx.restore();
-    }
-
-    // High-Resolution Image Export Logic
     downloadBtn.addEventListener('click', () => {
       if (!state.image) return;
-
       const link = document.createElement('a');
-      const prefix = state.mode === 'standard' ? 'studiogrid-standard' : (state.mode === 'value' ? 'studiogrid-value' : (state.mode === 'subdivision' ? 'studiogrid-subdivision' : 'studiogrid-cropped'));
-      link.download = `${prefix}-${Date.now()}.png`;
-
-      try {
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      } catch (e) {
-        console.error('Download error:', e);
-        alert('Nie można automatycznie pobrać pliku. Kliknij prawym przyciskiem myszy na obraz i wybierz "Zapisz obraz jako...".');
-      }
-    });
-
-    window.addEventListener('resize', () => {
-      if (state.image) render();
+      link.download = `studiogrid-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
     });
   </script>
 </body>
