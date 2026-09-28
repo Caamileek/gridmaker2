@@ -71,7 +71,7 @@
       <div>
         <h1 class="font-bold text-base tracking-wide leading-tight flex items-center gap-2">
           StudioGrid Pro
-          <span class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-1.5 py-0.5 rounded font-mono">v3.0</span>
+          <span class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-1.5 py-0.5 rounded font-mono">v3.2</span>
         </h1>
         <p class="text-xs text-slate-400">Siatka, analiza waloru, kontury i kadrowanie dla artystów</p>
       </div>
@@ -292,7 +292,22 @@
             <span>Analiza Waloru (Masa)</span>
             <i class="fa-solid fa-circle-half-stroke text-emerald-400"></i>
           </h2>
-          <p class="text-xs text-slate-400">Dostosuj jasność, kontrast i poziom szarości do oceny planów, mas tonalnych i światłocienia.</p>
+          <p class="text-xs text-slate-400">Najedź kursorem na obszar obrazu, aby poznać odcień szarości oraz sugerowaną twardość ołówka.</p>
+
+          <!-- LIVE TONAL & PENCIL ADVICE BOX -->
+          <div class="p-3 rounded-xl bg-slate-950 border border-emerald-500/30 space-y-2.5">
+            <div class="flex items-center justify-between text-xs border-b border-slate-800 pb-2">
+              <span class="text-slate-400">Odcień (Jasność):</span>
+              <div class="flex items-center gap-2">
+                <div id="valColorSwatch" class="w-4 h-4 rounded border border-slate-700 bg-slate-800 shrink-0"></div>
+                <span id="valInfoGray" class="font-mono font-semibold text-emerald-400">Najeżdżaj...</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-slate-400">Zalecany ołówek:</span>
+              <span id="valInfoPencil" class="font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">-</span>
+            </div>
+          </div>
 
           <!-- Grayscale / B&W Toggle -->
           <label class="flex items-center justify-between p-3 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 cursor-pointer transition">
@@ -305,6 +320,25 @@
             </div>
             <input type="checkbox" id="valGrayscale" class="w-4 h-4 rounded text-emerald-500 bg-slate-700 border-slate-600 focus:ring-0">
           </label>
+        </div>
+
+        <hr class="border-slate-800">
+
+        <!-- Gaussian Blur Control -->
+        <div class="space-y-4">
+          <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+            <span>Rozmycie Gaussowskie (Blur)</span>
+            <i class="fa-solid fa-water text-emerald-400"></i>
+          </h2>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-xs text-slate-300">Promień rozmycia:</label>
+              <span id="valBlurVal" class="font-mono text-emerald-400 text-xs">0 px</span>
+            </div>
+            <input type="range" id="valBlur" min="0" max="30" value="0" step="1" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+            <p class="text-[11px] text-slate-400 mt-1">Ułatwia widzenie plam i upraszczanie detali (efekt przymrużonych oczu).</p>
+          </div>
         </div>
 
         <hr class="border-slate-800">
@@ -617,18 +651,19 @@
       rows: 3,
       showVertical: true,
       showHorizontal: true,
-      showMainDiagDown: false, // Skos opadający \ (Całość)
-      showMainDiagUp: false,   // Skos wznoszący / (Całość)
-      cellDiagDown: false,     // Skos opadający \ (W komórkach)
-      cellDiagUp: false,       // Skos wznoszący / (W komórkach)
+      showMainDiagDown: false,
+      showMainDiagUp: false,
+      cellDiagDown: false,
+      cellDiagUp: false,
       showPoints: true,
       color: '#ef4444',
       lineWidth: 2,
       opacity: 0.8,
       lineStyle: 'solid',
 
-      // Tool 2: Masa & Walor (Tonal Adjustments)
+      // Tool 2: Masa & Walor (Tonal Adjustments & Blur)
       valGrayscale: false,
+      valBlur: 0, // 0 to 30 px
       valBrightness: 0, // -100 to 100
       valContrast: 0,   // -100 to 100
       valPosterizeEnable: false,
@@ -640,13 +675,13 @@
       subOutlineColor: '#00ffff',
       subShowMainAxes: true,
       subShowDiagonals: true,
-      subLevel: 2, // 1, 2, 3, 4
+      subLevel: 2,
       subShowImage: true,
       subGridWidth: 1.5,
       subGridColor: '#38bdf8',
 
       // Tool 4: Advanced Crop & Rotation
-      rotationAngle: 0, // In degrees (-180 to 180)
+      rotationAngle: 0,
       cropRatio: 'free',
       cropBox: { x: 0, y: 0, w: 0, h: 0 },
       isDraggingCrop: false,
@@ -654,7 +689,6 @@
       dragStartPos: { x: 0, y: 0 },
       initialCropBox: null,
 
-      // Edge processing offscreen canvas cache
       edgeCanvas: null
     };
 
@@ -704,6 +738,8 @@
 
     // Tool 2 Controls
     const valGrayscale = document.getElementById('valGrayscale');
+    const valBlur = document.getElementById('valBlur');
+    const valBlurVal = document.getElementById('valBlurVal');
     const valBrightness = document.getElementById('valBrightness');
     const valBrightnessVal = document.getElementById('valBrightnessVal');
     const valContrast = document.getElementById('valContrast');
@@ -712,6 +748,9 @@
     const valPosterizeLevels = document.getElementById('valPosterizeLevels');
     const valPosterizeLevelsVal = document.getElementById('valPosterizeLevelsVal');
     const resetValueBtn = document.getElementById('resetValueBtn');
+    const valInfoGray = document.getElementById('valInfoGray');
+    const valInfoPencil = document.getElementById('valInfoPencil');
+    const valColorSwatch = document.getElementById('valColorSwatch');
 
     // Tool 3 Controls
     const subEnableOutline = document.getElementById('subEnableOutline');
@@ -827,7 +866,7 @@
       reader.readAsDataURL(file);
     }
 
-    // Tool 1 listeners (Flexible Grid & Sliders/Inputs)
+    // Tool 1 listeners
     function syncCols(val) {
       let parsed = Math.max(1, Math.min(50, parseInt(val) || 1));
       state.cols = parsed;
@@ -903,8 +942,14 @@
       render();
     });
 
-    // Tool 2 Listeners (Masa & Walor)
+    // Tool 2 Listeners (Masa, Walor & Gaussian Blur)
     valGrayscale.addEventListener('change', (e) => { state.valGrayscale = e.target.checked; render(); });
+
+    valBlur.addEventListener('input', (e) => {
+      state.valBlur = parseInt(e.target.value);
+      valBlurVal.textContent = state.valBlur + ' px';
+      render();
+    });
 
     valBrightness.addEventListener('input', (e) => {
       state.valBrightness = parseInt(e.target.value);
@@ -928,12 +973,15 @@
 
     resetValueBtn.addEventListener('click', () => {
       state.valGrayscale = false;
+      state.valBlur = 0;
       state.valBrightness = 0;
       state.valContrast = 0;
       state.valPosterizeEnable = false;
       state.valPosterizeLevels = 4;
 
       valGrayscale.checked = false;
+      valBlur.value = 0;
+      valBlurVal.textContent = "0 px";
       valBrightness.value = 0;
       valBrightnessVal.textContent = "0%";
       valContrast.value = 0;
@@ -1094,7 +1142,6 @@
       render();
     });
 
-    // Fast 90 deg Rotate & Horizontal Flip
     rotateCwBtn.addEventListener('click', () => {
       if (!state.image) return;
       const tCanvas = document.createElement('canvas');
@@ -1138,14 +1185,12 @@
       newImg.src = tCanvas.toDataURL();
     });
 
-    // Apply Crop and Angle Rotation
     applyCropBtn.addEventListener('click', () => {
       if (!state.image) return;
 
       const c = state.cropBox;
       if (c.w <= 0 || c.h <= 0) return;
 
-      // 1. Render rotated image to temp canvas if rotation angle != 0
       let sourceImageCanvas = state.image;
       if (state.rotationAngle !== 0) {
         const rad = state.rotationAngle * Math.PI / 180;
@@ -1160,7 +1205,6 @@
         sourceImageCanvas = rotCanvas;
       }
 
-      // 2. Crop the area from the rotated/original canvas
       const cropCanvas = document.createElement('canvas');
       cropCanvas.width = Math.round(c.w);
       cropCanvas.height = Math.round(c.h);
@@ -1176,7 +1220,7 @@
       croppedImg.onload = () => {
         state.image = croppedImg;
         state.edgeCanvas = null;
-        state.rotationAngle = 0; // Reset rotation slider after crop application
+        state.rotationAngle = 0;
         rotationAngle.value = 0;
         rotationVal.textContent = "0°";
 
@@ -1199,7 +1243,17 @@
       render();
     });
 
-    // Interactive Mouse Handles on Canvas
+    // Funkcja mapująca wartość szarości (0-255) na odpowiednią twardość ołówka
+    function getPencilRecommendation(grayVal) {
+      if (grayVal > 230) return { range: "9H – 4H", desc: "Bardzo jasne światła" };
+      if (grayVal > 190) return { range: "3H – H", desc: "Jasne półcienie" };
+      if (grayVal > 140) return { range: "HB – F", desc: "Neutralne szarości" };
+      if (grayVal > 90)  return { range: "B – 2B", desc: "Średni walor / masa" };
+      if (grayVal > 40)  return { range: "3B – 5B", desc: "Gębokie cienie" };
+      return { range: "6B – 9B", desc: "Głęboka czerń" };
+    }
+
+    // Interactive Mouse Handles on Canvas & Value Inspecting
     function getMousePosOnCanvas(e) {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
@@ -1210,41 +1264,27 @@
       };
     }
 
-    canvas.addEventListener('mousedown', (e) => {
-      if (state.mode !== 'crop' || !state.image) return;
+    canvas.addEventListener('mousemove', (e) => {
       const pos = getMousePosOnCanvas(e);
-      const cb = state.cropBox;
-      const handleRadius = Math.max(12, canvas.width * 0.02);
 
-      const handles = getHandlePositions(cb);
-      let hitHandle = null;
+      // Jeśli jesteśmy w trybie waloru, odczytujemy kolor piksela pod kursorem
+      if (state.mode === 'value' && state.image) {
+        if (pos.x >= 0 && pos.x < canvas.width && pos.y >= 0 && pos.y < canvas.height) {
+          const pixel = ctx.getImageData(Math.floor(pos.x), Math.floor(pos.y), 1, 1).data;
+          const gray = Math.round(0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2]);
+          const percent = Math.round((1 - gray / 255) * 100);
+          const pencil = getPencilRecommendation(gray);
 
-      for (let h in handles) {
-        const hp = handles[h];
-        const dist = Math.hypot(pos.x - hp.x, pos.y - hp.y);
-        if (dist <= handleRadius) {
-          hitHandle = h;
-          break;
+          valInfoGray.textContent = `${gray}/255 (${percent}%)`;
+          valInfoPencil.textContent = `${pencil.range} (${pencil.desc})`;
+          
+          // Aktualizacja próbka koloru na panelu
+          valColorSwatch.style.backgroundColor = `rgb(${gray}, ${gray}, ${gray})`;
         }
       }
 
-      if (hitHandle) {
-        state.isDraggingCrop = true;
-        state.activeHandle = hitHandle;
-        state.dragStartPos = pos;
-        state.initialCropBox = { ...cb };
-      } else if (pos.x >= cb.x && pos.x <= cb.x + cb.w && pos.y >= cb.y && pos.y <= cb.y + cb.h) {
-        state.isDraggingCrop = true;
-        state.activeHandle = 'move';
-        state.dragStartPos = pos;
-        state.initialCropBox = { ...cb };
-      }
-    });
-
-    window.addEventListener('mousemove', (e) => {
       if (state.mode !== 'crop' || !state.isDraggingCrop) return;
 
-      const pos = getMousePosOnCanvas(e);
       const dx = pos.x - state.dragStartPos.x;
       const dy = pos.y - state.dragStartPos.y;
       const init = state.initialCropBox;
@@ -1287,6 +1327,37 @@
       render();
     });
 
+    canvas.addEventListener('mousedown', (e) => {
+      if (state.mode !== 'crop' || !state.image) return;
+      const pos = getMousePosOnCanvas(e);
+      const cb = state.cropBox;
+      const handleRadius = Math.max(12, canvas.width * 0.02);
+
+      const handles = getHandlePositions(cb);
+      let hitHandle = null;
+
+      for (let h in handles) {
+        const hp = handles[h];
+        const dist = Math.hypot(pos.x - hp.x, pos.y - hp.y);
+        if (dist <= handleRadius) {
+          hitHandle = h;
+          break;
+        }
+      }
+
+      if (hitHandle) {
+        state.isDraggingCrop = true;
+        state.activeHandle = hitHandle;
+        state.dragStartPos = pos;
+        state.initialCropBox = { ...cb };
+      } else if (pos.x >= cb.x && pos.x <= cb.x + cb.w && pos.y >= cb.y && pos.y <= cb.y + cb.h) {
+        state.isDraggingCrop = true;
+        state.activeHandle = 'move';
+        state.dragStartPos = pos;
+        state.initialCropBox = { ...cb };
+      }
+    });
+
     window.addEventListener('mouseup', () => {
       state.isDraggingCrop = false;
       state.activeHandle = null;
@@ -1305,20 +1376,24 @@
       };
     }
 
-    // Helper: Draw Base Image with Tonal Adjustments (Masa / Walor)
+    // Helper: Draw Base Image with Tonal Adjustments & Gaussian Blur (Masa / Walor)
     function drawAdjustedImage(targetCtx, img, w, h) {
       const offCanvas = document.createElement('canvas');
       offCanvas.width = w;
       offCanvas.height = h;
       const offCtx = offCanvas.getContext('2d');
 
-      offCtx.drawImage(img, 0, 0, w, h);
-
-      // Check if any value filter is active
+      const isBlurred = state.valBlur > 0;
       const isAdjusted = state.valGrayscale || state.valBrightness !== 0 || state.valContrast !== 0 || state.valPosterizeEnable;
 
+      if (isBlurred) {
+        offCtx.filter = `blur(${state.valBlur}px)`;
+      }
+      offCtx.drawImage(img, 0, 0, w, h);
+      offCtx.filter = 'none';
+
       if (!isAdjusted) {
-        targetCtx.drawImage(img, 0, 0, w, h);
+        targetCtx.drawImage(offCanvas, 0, 0);
         return;
       }
 
@@ -1334,27 +1409,23 @@
         let g = data[i + 1];
         let b = data[i + 2];
 
-        // 1. Grayscale conversion
         if (state.valGrayscale) {
           const gray = 0.299 * r + 0.587 * g + 0.114 * b;
           r = g = b = gray;
         }
 
-        // 2. Brightness
         if (state.valBrightness !== 0) {
           r += brightnessOffset;
           g += brightnessOffset;
           b += brightnessOffset;
         }
 
-        // 3. Contrast
         if (state.valContrast !== 0) {
           r = contrastFactor * (r - 128) + 128;
           g = contrastFactor * (g - 128) + 128;
           b = contrastFactor * (b - 128) + 128;
         }
 
-        // 4. Posterize / Value Levels
         if (state.valPosterizeEnable) {
           r = Math.round(Math.round(r / posterizeStep) * posterizeStep);
           g = Math.round(Math.round(g / posterizeStep) * posterizeStep);
@@ -1471,7 +1542,6 @@
       const colStep = w / state.cols;
       const rowStep = h / state.rows;
 
-      // Vertical Grid Lines
       if (state.showVertical) {
         for (let i = 1; i < state.cols; i++) {
           const x = colStep * i;
@@ -1482,7 +1552,6 @@
         }
       }
 
-      // Horizontal Grid Lines
       if (state.showHorizontal) {
         for (let j = 1; j < state.rows; j++) {
           const y = rowStep * j;
@@ -1493,7 +1562,6 @@
         }
       }
 
-      // Full Image Main Diagonals (\ and /)
       if (state.showMainDiagDown) {
         ctx.beginPath();
         ctx.moveTo(0, 0);
@@ -1508,7 +1576,6 @@
         ctx.stroke();
       }
 
-      // Individual Cell Diagonals (\ and /)
       if (state.cellDiagDown || state.cellDiagUp) {
         for (let i = 0; i < state.cols; i++) {
           for (let j = 0; j < state.rows; j++) {
@@ -1529,7 +1596,6 @@
         }
       }
 
-      // Focal Points Toggles
       if (state.showPoints) {
         ctx.setLineDash([]);
         ctx.fillStyle = state.color;
@@ -1627,7 +1693,6 @@
     function renderCropTool(w, h) {
       ctx.save();
 
-      // 1. Draw Rotated Image Preview on Canvas
       if (state.rotationAngle !== 0) {
         ctx.translate(w / 2, h / 2);
         ctx.rotate(state.rotationAngle * Math.PI / 180);
@@ -1640,14 +1705,12 @@
 
       const cb = state.cropBox;
 
-      // 2. Dark Mask Overlay Outside Crop Bounds
       ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
       ctx.beginPath();
       ctx.rect(0, 0, w, h);
       ctx.rect(cb.x, cb.y, cb.w, cb.h);
       ctx.fill('evenodd');
 
-      // 3. Inner Composition Grid (Rule of Thirds)
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
       ctx.lineWidth = 1;
 
@@ -1666,12 +1729,10 @@
         ctx.stroke();
       }
 
-      // 4. Crop Frame Border
       ctx.strokeStyle = '#f59e0b';
       ctx.lineWidth = 2;
       ctx.strokeRect(cb.x, cb.y, cb.w, cb.h);
 
-      // 5. Active Corner & Edge Drag Handles
       const handles = getHandlePositions(cb);
       const handleRadius = Math.max(8, w * 0.012);
 
@@ -1707,7 +1768,6 @@
       }
     });
 
-    // Window Resize Handling
     window.addEventListener('resize', () => {
       if (state.image) render();
     });
