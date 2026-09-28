@@ -708,19 +708,15 @@
     const sidebarOverlay = document.getElementById('sidebarOverlay');
 
     function toggleMobileMenu(forceOpen = null) {
-      const isClosed = sidebarStandard.classList.contains('-translate-x-full') &&
-                       sidebarValue.classList.contains('-translate-x-full') &&
-                       sidebarSubdivision.classList.contains('-translate-x-full') &&
-                       sidebarCrop.classList.contains('-translate-x-full');
-      
-      const shouldOpen = forceOpen !== null ? forceOpen : isClosed;
       const activeSidebar = getActiveSidebar();
+      const isClosed = activeSidebar.classList.contains('-translate-x-full');
+      const shouldOpen = forceOpen !== null ? forceOpen : isClosed;
 
       if (shouldOpen) {
         activeSidebar.classList.remove('-translate-x-full');
         sidebarOverlay.classList.remove('hidden');
       } else {
-        [sidebarStandard, sidebarValue, sidebarSubdivision, sidebarCrop].forEach(s => s.classList.add('-translate-x-full'));
+        activeSidebar.classList.add('-translate-x-full');
         sidebarOverlay.classList.add('hidden');
       }
     }
@@ -808,41 +804,36 @@
       state.mode = newMode;
       
       [modeStandardBtn, modeValueBtn, modeSubdivisionBtn, modeCropBtn, m_modeStandardBtn, m_modeValueBtn, m_modeSubdivisionBtn, m_modeCropBtn].forEach(b => b.classList.remove('tab-active'));
+      
+      // Ukrywamy wszystkie sidebary i upewniamy się, że są zwinięte (-translate-x-full)
       [sidebarStandard, sidebarValue, sidebarSubdivision, sidebarCrop].forEach(s => {
         s.classList.add('hidden');
         s.classList.add('-translate-x-full');
       });
 
+      let activeSidebar = getActiveSidebar();
+      activeSidebar.classList.remove('hidden');
+      // Celowo nie usuwamy -translate-x-full, dzięki czemu menu po zmianie narzędzia zostaje zwinięte
+
       if (newMode === 'standard') {
         modeStandardBtn.classList.add('tab-active');
         m_modeStandardBtn.classList.add('tab-active');
-        sidebarStandard.classList.remove('hidden');
-        sidebarStandard.classList.remove('-translate-x-full');
       } else if (newMode === 'value') {
         modeValueBtn.classList.add('tab-active');
         m_modeValueBtn.classList.add('tab-active');
-        sidebarValue.classList.remove('hidden');
-        sidebarValue.classList.remove('-translate-x-full');
       } else if (newMode === 'subdivision') {
         modeSubdivisionBtn.classList.add('tab-active');
         m_modeSubdivisionBtn.classList.add('tab-active');
-        sidebarSubdivision.classList.remove('hidden');
-        sidebarSubdivision.classList.remove('-translate-x-full');
         if (state.image && !state.edgeCanvas) computeEdgeDetection();
       } else if (newMode === 'crop') {
         modeCropBtn.classList.add('tab-active');
         m_modeCropBtn.classList.add('tab-active');
-        sidebarCrop.classList.remove('hidden');
-        sidebarCrop.classList.remove('-translate-x-full');
         if (state.image && (state.cropBox.w === 0 || state.cropBox.h === 0)) {
           resetCropBoxToImage();
         }
       }
 
-      if (window.innerWidth < 768) {
-        sidebarOverlay.classList.add('hidden');
-      }
-
+      sidebarOverlay.classList.add('hidden');
       render();
     }
 
@@ -1751,7 +1742,6 @@
       const thirdH = cb.h / 3;
 
       for (let i = 1; i < 3; i++) {
-        // Poprawiono błąd rysowania linii poziomej kadru
         ctx.beginPath();
         ctx.moveTo(cb.x + thirdW * i, cb.y);
         ctx.lineTo(cb.x + thirdW * i, cb.y + cb.h);
