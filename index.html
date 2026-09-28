@@ -76,7 +76,7 @@
       <div class="hidden sm:block">
         <h1 class="font-bold text-base tracking-wide leading-tight flex items-center gap-2">
           StudioGrid Pro
-          <span class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-1.5 py-0.5 rounded font-mono">v3.2</span>
+          <span class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-1.5 py-0.5 rounded font-mono">v3.2.1</span>
         </h1>
         <p class="text-xs text-slate-400">Siatka, analiza waloru, kontury i kadrowanie dla artystów</p>
       </div>
@@ -117,7 +117,7 @@
     </div>
   </header>
 
-  <!-- Mobilny pasek zakładek (wyświetlany tylko na telefonach pod nagłówkiem) -->
+  <!-- Mobilny pasek zakładek -->
   <div class="md:hidden flex bg-slate-900 border-b border-slate-800 p-1.5 overflow-x-auto z-20 shrink-0 gap-1">
     <button id="m_modeStandardBtn" class="tab-active px-2.5 py-1.5 text-xs font-medium rounded-lg transition flex items-center gap-1 text-slate-400 whitespace-nowrap">
       <i class="fa-solid fa-border-all"></i> <span>1. Siatka</span>
@@ -135,14 +135,11 @@
 
   <div class="flex flex-1 overflow-hidden relative">
 
-    <!-- OVERLAY TŁA DLA URZĄDZEŃ MOBILNYCH (gdy menu jest wysunięte) -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/60 z-30 hidden md:hidden transition-opacity"></div>
 
-    <!-- LEFT SIDEBAR: TOOL 1 (Standard & Custom Grid Controls) -->
+    <!-- LEFT SIDEBAR: TOOL 1 -->
     <aside id="sidebarStandard" class="fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out w-80 border-r border-slate-800 bg-slate-900 flex flex-col shrink-0 overflow-y-auto">
       <div class="p-4 space-y-6">
-
-        <!-- Grid Layout Presets & Division Inputs -->
         <div class="space-y-3">
           <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
             <span>Podział Siatki (1-50)</span>
@@ -159,7 +156,6 @@
           </div>
 
           <div class="space-y-3 pt-1">
-            <!-- Columns Control -->
             <div>
               <div class="flex justify-between items-center mb-1">
                 <label class="text-xs text-slate-300">Kolumny (pionowe):</label>
@@ -168,7 +164,6 @@
               <input type="range" id="gridCols" min="1" max="50" value="3" class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-500">
             </div>
 
-            <!-- Rows Control -->
             <div>
               <div class="flex justify-between items-center mb-1">
                 <label class="text-xs text-slate-300">Wiersze (poziome):</label>
@@ -181,7 +176,6 @@
 
         <hr class="border-slate-800">
 
-        <!-- Moduły Widoczności Linii i Skosów -->
         <div class="space-y-3">
           <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
             <span>Widoczność Linii i Skosów</span>
@@ -250,7 +244,6 @@
 
         <hr class="border-slate-800">
 
-        <!-- Styl linii -->
         <div class="space-y-3 pb-6">
           <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
             <span>Styl i Wygląd Linii</span>
@@ -299,14 +292,12 @@
             </select>
           </div>
         </div>
-
       </div>
     </aside>
 
-    <!-- LEFT SIDEBAR: TOOL 2 (Tonal & Value Adjustments / Masa i Walor) -->
+    <!-- LEFT SIDEBAR: TOOL 2 -->
     <aside id="sidebarValue" class="fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out w-80 border-r border-slate-800 bg-slate-900 flex flex-col shrink-0 overflow-y-auto hidden">
       <div class="p-4 space-y-6 pb-16">
-
         <div class="space-y-3">
           <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
             <span>Analiza Waloru (Masa)</span>
@@ -412,14 +403,12 @@
             <span>Zresetuj ustawienia waloru</span>
           </button>
         </div>
-
       </div>
     </aside>
 
-    <!-- LEFT SIDEBAR: TOOL 3 (Contour & Recursive Subdivisions Controls) -->
+    <!-- LEFT SIDEBAR: TOOL 3 -->
     <aside id="sidebarSubdivision" class="fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out w-80 border-r border-slate-800 bg-slate-900 flex flex-col shrink-0 overflow-y-auto hidden">
       <div class="p-4 space-y-6 pb-16">
-
         <div class="space-y-3">
           <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
             <span>Wykrywanie Konturu (Sobel)</span>
@@ -513,14 +502,12 @@
             </div>
           </div>
         </div>
-
       </div>
     </aside>
 
-    <!-- LEFT SIDEBAR: TOOL 4 (Crop, Rotate & Straighten Controls) -->
+    <!-- LEFT SIDEBAR: TOOL 4 -->
     <aside id="sidebarCrop" class="fixed md:relative inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out w-80 border-r border-slate-800 bg-slate-900 flex flex-col shrink-0 overflow-y-auto hidden">
       <div class="p-4 space-y-6 pb-16">
-
         <div class="space-y-3">
           <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center justify-between">
             <span>Proporcje Kadru (Aspect Ratio)</span>
@@ -619,7 +606,6 @@
             <span>Przywróć Oryginał</span>
           </button>
         </div>
-
       </div>
     </aside>
 
@@ -648,9 +634,8 @@
   </div>
 
   <script>
-    // Application State Object
     const state = {
-      mode: 'standard', // 'standard' | 'value' | 'subdivision' | 'crop'
+      mode: 'standard',
       originalImage: null, 
       image: null,         
       
@@ -696,7 +681,6 @@
       edgeCanvas: null
     };
 
-    // DOM References
     const canvas = document.getElementById('mainCanvas');
     const ctx = canvas.getContext('2d');
     const imageLoader = document.getElementById('imageLoader');
@@ -705,7 +689,6 @@
     const dropZone = document.getElementById('dropZone');
     const downloadBtn = document.getElementById('downloadBtn');
 
-    // Sidebar Toggles (Desktop & Mobile)
     const modeStandardBtn = document.getElementById('modeStandardBtn');
     const modeValueBtn = document.getElementById('modeValueBtn');
     const modeSubdivisionBtn = document.getElementById('modeSubdivisionBtn');
@@ -721,7 +704,6 @@
     const sidebarSubdivision = document.getElementById('sidebarSubdivision');
     const sidebarCrop = document.getElementById('sidebarCrop');
 
-    // Mobile Drawer Controls
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
 
@@ -753,7 +735,6 @@
     mobileMenuToggle.addEventListener('click', () => toggleMobileMenu());
     sidebarOverlay.addEventListener('click', () => toggleMobileMenu(false));
 
-    // Tool 1 Controls
     const gridCols = document.getElementById('gridCols');
     const gridColsNum = document.getElementById('gridColsNum');
     const gridRows = document.getElementById('gridRows');
@@ -777,7 +758,6 @@
     const opacityVal = document.getElementById('opacityVal');
     const lineStyle = document.getElementById('lineStyle');
 
-    // Tool 2 Controls
     const valGrayscale = document.getElementById('valGrayscale');
     const valBlur = document.getElementById('valBlur');
     const valBlurVal = document.getElementById('valBlurVal');
@@ -793,7 +773,6 @@
     const valInfoPencil = document.getElementById('valInfoPencil');
     const valColorSwatch = document.getElementById('valColorSwatch');
 
-    // Tool 3 Controls
     const subEnableOutline = document.getElementById('subEnableOutline');
     const subThreshold = document.getElementById('subThreshold');
     const subThresholdVal = document.getElementById('subThresholdVal');
@@ -809,7 +788,6 @@
     const subGridColor = document.getElementById('subGridColor');
     const subGridHex = document.getElementById('subGridHex');
 
-    // Tool 4 Controls
     const rotationAngle = document.getElementById('rotationAngle');
     const rotationVal = document.getElementById('rotationVal');
     const zeroRotationBtn = document.getElementById('zeroRotationBtn');
@@ -821,7 +799,6 @@
     const applyCropBtn = document.getElementById('applyCropBtn');
     const resetCropBtn = document.getElementById('resetCropBtn');
 
-    // Mode Switching Logic
     [modeStandardBtn, m_modeStandardBtn].forEach(b => b.addEventListener('click', () => switchMode('standard')));
     [modeValueBtn, m_modeValueBtn].forEach(b => b.addEventListener('click', () => switchMode('value')));
     [modeSubdivisionBtn, m_modeSubdivisionBtn].forEach(b => b.addEventListener('click', () => switchMode('subdivision')));
@@ -862,7 +839,6 @@
         }
       }
 
-      // Na urządzeniach mobilnych po zmianie trybu chowamy nakładkę i wysuwane menu
       if (window.innerWidth < 768) {
         sidebarOverlay.classList.add('hidden');
       }
@@ -870,7 +846,6 @@
       render();
     }
 
-    // Image Upload & Drag-and-Drop Operations
     imageLoader.addEventListener('change', (e) => {
       if (e.target.files.length > 0) processFile(e.target.files[0]);
     });
@@ -924,7 +899,6 @@
       reader.readAsDataURL(file);
     }
 
-    // Tool 1 listeners
     function syncCols(val) {
       let parsed = Math.max(1, Math.min(50, parseInt(val) || 1));
       state.cols = parsed;
@@ -1000,7 +974,6 @@
       render();
     });
 
-    // Tool 2 Listeners
     valGrayscale.addEventListener('change', (e) => { state.valGrayscale = e.target.checked; render(); });
 
     valBlur.addEventListener('input', (e) => {
@@ -1051,7 +1024,6 @@
       render();
     });
 
-    // Tool 3 Listeners
     subEnableOutline.addEventListener('change', (e) => { state.subEnableOutline = e.target.checked; render(); });
     
     subThreshold.addEventListener('input', (e) => {
@@ -1091,7 +1063,6 @@
       render();
     });
 
-    // Tool 4 Listeners
     rotationAngle.addEventListener('input', (e) => {
       state.rotationAngle = parseFloat(e.target.value);
       rotationVal.textContent = state.rotationAngle + "°";
@@ -1780,6 +1751,7 @@
       const thirdH = cb.h / 3;
 
       for (let i = 1; i < 3; i++) {
+        // Poprawiono błąd rysowania linii poziomej kadru
         ctx.beginPath();
         ctx.moveTo(cb.x + thirdW * i, cb.y);
         ctx.lineTo(cb.x + thirdW * i, cb.y + cb.h);
@@ -1787,7 +1759,7 @@
 
         ctx.beginPath();
         ctx.moveTo(cb.x, cb.y + thirdH * i);
-        ctx.lineTo(cb.x, cb.y + thirdH * i);
+        ctx.lineTo(cb.x + cb.w, cb.y + thirdH * i);
         ctx.stroke();
       }
 
